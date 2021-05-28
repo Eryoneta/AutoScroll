@@ -1,0 +1,22 @@
+{
+	"manifest_version":2,
+	"name":"AutoScroll",
+	"version":"3.0",
+	"description":"Customizes and adds useful functions to the autoscroll.",
+	"browser_action":{
+		"default_icon":"Icons/Icone32.png"
+	},
+	"content_scripts":[{
+		"js":["AutoScroll.js"],
+		"all_frames":false,
+		"matches":["http://*/*","https://*/*"],
+		"run_at":"document_start"
+	}],
+	"icons":{
+		"16":"Icons/Icone16.png",
+		"32":"Icons/Icone32.png",
+		"48":"Icons/Icone48.png",
+		"128":"Icons/Icone128.png"
+	},
+	"web_accessible_resources":["Scrolls/*.png"]
+}
