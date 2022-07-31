@@ -15,9 +15,12 @@
 			"32": "Icons/Icone32.png"
 		}
 	},
+	"background": {
+		"service_worker": "service.js"
+	},
 	"content_scripts": [{
-		"matches": ["http://*/*","https://*/*"],
-		"js": ["AutoScroll.js"],
+		"matches": ["<all_urls>"],
+		"js": ["inject.js", "autoScrollFlow.js", "autoScroll.js"],
 		"all_frames": false,
 		"run_at": "document_start"
 	}],
