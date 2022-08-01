@@ -71,9 +71,7 @@
 							stopEvent(m);
 							autoScroll.setAnchor(m.clientX,m.clientY);
 							disableDefaultActions();
-							
-							// ativar(elemento,mouseDownX,mouseDownY);
-							
+							// startAnimation();
 							setState(State.WAITING+State.INACTIVE);
 						}
 					}

@@ -41,21 +41,23 @@
 	}
 	function createAnchorCSS(inner){
 		const styler=document.createElement("style");
-		inner.style.setProperty("animation-duration","3s");
-		inner.style.setProperty("animation-iteration-count","infinite");
-		let animacoes="";
-		for(let s=0;s<=1;s++){						//PARADO OU APONTANDO
-			for(let direcao of frames[s][0]){			//MEIO OU DIREÇÕES
-				for(let modo of frames[s][1]){				//MODOS
-					animacoes+="@keyframes "+direcao+"_"+modo+"{";
-					for(let frame of frames[2]){	//ANIMAÇÃO
-						const cursor=(direcao+"/"+modo+"/"+frame[1]);	//EX: M/H/3 MEIO>HORIZONTAL>FRAME 3
-						animacoes+=(frame[0]+"%{cursor:url('"+chrome.runtime.getURL("Scrolls/"+cursor+".png")+"')16 16,auto;}");
-					}
-					animacoes+="}";
-				}
-			}
-		}
-		styler.innerHTML=animacoes;
+		// inner.style.setProperty("animation-duration","3s");
+		// inner.style.setProperty("animation-iteration-count","infinite");
+		// let animacoes="";
+		// for(let s=0;s<=1;s++){						//PARADO OU APONTANDO
+			// for(let direcao of frames[s][0]){			//MEIO OU DIREÇÕES
+				// for(let modo of frames[s][1]){				//MODOS
+					// animacoes+="@keyframes "+direcao+"_"+modo+"{";
+					// for(let frame of frames[2]){	//ANIMAÇÃO
+						// const cursor=(direcao+"/"+modo+"/"+frame[1]);	//EX: M/H/3 MEIO>HORIZONTAL>FRAME 3
+						// animacoes+=(frame[0]+"%{cursor:url('"+chrome.runtime.getURL("Scrolls/"+cursor+".png")+"')16 16,auto;}");
+					// }
+					// animacoes+="}";
+				// }
+			// }
+		// }
+		// styler.innerHTML=animacoes;
+		
+		styler.innerHTML=generateCursorAnimations(inner.style);
 		return styler;
 	}

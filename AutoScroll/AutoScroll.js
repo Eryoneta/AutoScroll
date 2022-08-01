@@ -16,20 +16,14 @@
 			return false;
 		}
 	};
-//VARS: AUTODSCROLL
+//VARS: AUTOSCROLL
 	const autoScroll={
-	//ANIMATION
+	//ANIMATION LOOP
 		animationLoop: null,
-	//ELEMENTS
+	//TARGETS
 		target: null,
 		rootTarget: null,
-		hasTarget:()=>{
-			return (autoScroll.target!==null||autoScroll.rootTarget!==null);
-		},
-		clearTarget:()=>{
-			autoScroll.target=null;
-			autoScroll.rootTarget=null;
-		},
+		hasTarget:()=>(autoScroll.target!==null||autoScroll.rootTarget!==null),
 	//ANCHOR
 		anchor: {
 			x: 0,
@@ -39,7 +33,7 @@
 			autoScroll.anchor.x=x;
 			autoScroll.anchor.y=y;
 		},
-	//DIRECTION
+	//DIRECTION TO AUTOSROLL
 		direction: {
 			x: 0,
 			y: 0
@@ -47,17 +41,44 @@
 		setDirection: (x,y)=>{
 			autoScroll.direction.x=x;
 			autoScroll.direction.y=y;
+		},
+	//SCROLL DURING ANIMATION
+		scroll: {
+			xValue: 0,
+			yValue: 0,
+			vertical: {
+				up: ()=>(autoScroll.scroll.yValue--),
+				down: ()=>(autoScroll.scroll.yValue++)
+			},
+			horizontal: {
+				left: ()=>(autoScroll.scroll.xValue--),
+				right: ()=>(autoScroll.scroll.xValue++)
+			},
+			clear: ()=>(autoScroll.verticalScroll.value=0)
+		},
+	//CURSOR
+		cursor:{
+			
+		},
+	//FUNCS
+		clear:()=>{
+			autoScroll.animationLoop=null;
+			autoScroll.target=null;
+			autoScroll.rootTarget=null;
+			autoScroll.setAnchor(0,0);
+			autoScroll.setDirection(0,0);
+			autoScroll.verticalScroll.clear();
 		}
 	};
 //VARS: MOUSE
 	const mouse={
 		x: 0,
-		y: 0
+		y: 0,
+		setPosition(x,y){
+			mouse.x=x;
+			mouse.y=y;
+		}
 	};
-	function setMouse(x,y){
-		mouse.x=x;
-		mouse.y=y;
-	}
 //VARS: LISTENERS
 	const listeners={
 		mousedown:(m)=>{},
@@ -147,4 +168,15 @@
 			if(elementStyle.overflow==="hidden")return false;
 			if(elementStyle.overflowX==="hidden"&&elementStyle.overflowY==="hidden")return false;
 			return true;
+		}
+//FUNCS: ANIMAÇÃO
+	function startAutoScroll(){
+		_animationLoop();
+	}
+	function stopAutoScroll(){
+		window.cancelAnimationFrame(autoScroll.animationLoop);
+	}
+		function _animationLoop(){
+			
+			autoScroll.animationLoop=window.requestAnimationFrame(_animationLoop);	//LOOP
 		}
