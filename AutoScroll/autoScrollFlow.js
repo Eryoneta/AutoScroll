@@ -11,79 +11,79 @@
 		PAUSED:10,								//ATIVO, MAS PARADO
 		WAITING:20								//ESPERANDO INPUT
 	}
-//STATES NODES
-	class StateNode{
-		state=State.INACTIVE;
-		statechange=()=>{};
-		mousedown=()=>{};
-		mouseup=()=>{};
-		wheel=()=>{};
-		mousemove=()=>{};
-		keydown=()=>{};
-		keyup=()=>{};
+//AUTOSCROLL_FLOW
+	class AutoScrollFlow{
+	//VARS
+		root;
+				_states={};
 	//MAIN
-		constructor(
-			state,
-			{
-				statechange=()=>{},
-				mousedown=()=>{},
-				mouseup=()=>{},
-				wheel=()=>{},
-				mousemove=()=>{},
-				keydown=()=>{},
-				keyup=()=>{}
-			}
-		){
-			this.state=state;
-			this.statechange=statechange;
-			this.mousedown=mousedown;
-			this.mouseup=mouseup;
-			this.wheel=wheel;
-			this.mousemove=mousemove;
-			this.keydown=keydown;
-			this.keyup=keyup;
+		constructor(autoScroll){
+			this.root=autoScroll;
 		}
-	}
-//LISTA DE STATES
-	const states={};
-	function addState(node){
-		states[node.state]=node;
-	}
-	function setState(state){
-		const node=states[state];
-		listeners.mousedown=node.mousedown;
-		listeners.mouseup=node.mouseup;
-		listeners.wheel=node.wheel;
-		listeners.mousemove=node.mousemove;
-		listeners.keydown=node.keydown;
-		listeners.keyup=node.keyup;
-		node.statechange();		//EXECUTA NODE_CHANGE
-	}
-//MAIN
-	(function(){
-	//[INACTIVE]
-		addState(new StateNode(State.INACTIVE,{
-			mousedown:(m)=>{
-				if(Mouse.match(m,Mouse.MIDDLE)){
-					if(isValidElement(m)){
-						setAutoScrollElement(m.target);
-						if(autoScroll.hasTarget()){
-							stopEvent(m);
-							autoScroll.setAnchor(m.clientX,m.clientY);
-							disableDefaultActions();
-							// startAnimation();
-							setState(State.WAITING+State.INACTIVE);
-						}
+	//FUNCS
+		init(){
+			this._loadFlow();
+			this.setState(State.INACTIVE);
+		}
+	//(STATES)
+		setState(state){
+			const node=this._states[state];
+			this.root.listeners.mousedown=node.mousedown;
+			this.root.listeners.mouseup=node.mouseup;
+			this.root.listeners.wheel=node.wheel;
+			this.root.listeners.mousemove=node.mousemove;
+			this.root.listeners.keydown=node.keydown;
+			this.root.listeners.keyup=node.keyup;
+			node.statechange();		//EXECUTA NODE_CHANGE
+		}
+				_addState(state,
+					{
+						statechange=()=>{},
+						mousedown=()=>{},
+						mouseup=()=>{},
+						wheel=()=>{},
+						mousemove=()=>{},
+						keydown=()=>{},
+						keyup=()=>{}
 					}
-				}else if(Mouse.match(m,Mouse.RIGHT)){
-					
+				){
+					const newNode={
+						state:state,
+						statechange:statechange,
+						mousedown:mousedown,
+						mouseup:mouseup,
+						wheel:wheel,
+						mousemove:mousemove,
+						keydown:keydown,
+						keyup:keyup
+					}
+					this._states[newNode.state]=newNode;
 				}
-			}
-		}));
-	//[WAITING+INACTIVE]
-		addState(new StateNode(State.WAITING+State.INACTIVE,{
-			statechange:()=>{
-				alert("STATUS CHANGED!");
-			}
-		}));
-	})();
+				_loadFlow(){
+				//[INACTIVE]
+					this._addState(State.INACTIVE,{
+						mousedown:(m)=>{
+							if(MouseEvent.match(m,MouseEvent.MIDDLE)){
+								if(this.root.isValidElement(m)){
+									this.root.setAutoScrollElement(m.target);
+									if(this.root.autoScroll.hasTarget()){
+										this.root.stopEvent(m);
+										this.root.autoScroll.setAnchor(m.clientX,m.clientY);
+										this.root.disableDefaultActions();
+										// startAnimation();
+										this.setState(State.WAITING+State.INACTIVE);
+									}
+								}
+							}else if(MouseEvent.match(m,MouseEvent.RIGHT)){
+								
+							}
+						}
+					});
+				//[WAITING+INACTIVE]
+					this._addState(State.WAITING+State.INACTIVE,{
+						statechange:()=>{
+							alert("STATUS CHANGED!");
+						}
+					});
+				}
+	}

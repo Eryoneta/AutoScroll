@@ -20,7 +20,7 @@
 	},
 	"content_scripts": [{
 		"matches": ["<all_urls>"],
-		"js": ["cursorAnimation.js", "inject.js", "autoScrollFlow.js", "autoScroll.js"],
+		"js": ["autoScroll.js", "autoScrollView.js", "autoScrollFlow.js", "injection.js"],
 		"all_frames": false,
 		"run_at": "document_start"
 	}],
