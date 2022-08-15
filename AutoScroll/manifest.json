@@ -18,14 +18,29 @@
 	"background": {
 		"service_worker": "service.js"
 	},
-	"content_scripts": [{
-		"matches": ["<all_urls>"],
-		"js": ["autoScroll.js", "autoScrollView.js", "autoScrollFlow.js", "injection.js"],
-		"all_frames": false,
-		"run_at": "document_start"
-	}],
-	"web_accessible_resources": [{
-		"resources": ["Scrolls/*.png"],
-		"matches": ["<all_urls>"]
-	}]
+	"content_scripts": [
+		{
+			"matches": [
+				"<all_urls>"
+			],
+			"js": [
+				"autoScroll.js",
+				"autoScrollView.js",
+				"autoScrollFlow.js",
+				"injection.js"
+			],
+			"all_frames": false,
+			"run_at": "document_start"
+		}
+	],
+	"web_accessible_resources": [
+		{
+			"resources": [
+				"Scrolls/*.png"
+			],
+			"matches": [
+				"<all_urls>"
+			]
+		}
+	]
 }
