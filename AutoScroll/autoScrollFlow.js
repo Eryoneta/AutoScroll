@@ -17,8 +17,8 @@ class AutoScrollFlow {
 	root;
 	_states = {};
 	//MAIN
-	constructor(autoScroll) {
-		this.root = autoScroll;
+	constructor(autoScrollRoot) {
+		this.root = autoScrollRoot;
 	}
 	//FUNCS
 	init() {

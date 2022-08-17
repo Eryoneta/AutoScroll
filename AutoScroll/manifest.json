@@ -24,7 +24,7 @@
 				"<all_urls>"
 			],
 			"js": [
-				"autoScroll.js",
+				"autoScrollRoot.js",
 				"autoScrollView.js",
 				"autoScrollFlow.js",
 				"injection.js"

@@ -1,4 +1,4 @@
 //MAIN
 (function () {
-	new AutoScroll().init();
+	new AutoScrollRoot().init();
 })();

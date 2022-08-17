@@ -20,7 +20,7 @@ const KeyboardEvent = {
 	}
 };
 //AUTOSCROLL
-class AutoScroll {
+class AutoScrollRoot {
 	//VARS
 	view = new AutoScrollView(this);
 	flow = new AutoScrollFlow(this);
@@ -174,7 +174,9 @@ class AutoScroll {
 		window.cancelAnimationFrame(this.autoScroll.animationLoop);
 	}
 	_animationLoop() {
-
+		//É chamada por um dos States
+		//Permite mudar o State enquanto ocorre, mudando seu comportamento
+		//
 		this.autoScroll.animationLoop = window.requestAnimationFrame(this._animationLoop);	//LOOP
 	}
 }

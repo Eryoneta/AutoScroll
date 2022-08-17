@@ -38,8 +38,8 @@ class AutoScrollView {
 		}
 	};
 	//MAIN
-	constructor(autoScroll) {
-		this.root = autoScroll;
+	constructor(autoScrollRoot) {
+		this.root = autoScrollRoot;
 		this._fillFrames();
 	}
 	//FUNCS
