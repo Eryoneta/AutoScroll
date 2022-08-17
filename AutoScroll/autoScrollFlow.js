@@ -20,11 +20,11 @@ class AutoScrollFlow {
 	constructor(autoScrollRoot) {
 		this.root = autoScrollRoot;
 	}
-	//FUNCS
 	init() {
 		this._loadFlow();
 		this.setState(State.INACTIVE);
 	}
+	//FUNCS
 	//(STATES)
 	setState(state) {
 		const node = this._states[state];

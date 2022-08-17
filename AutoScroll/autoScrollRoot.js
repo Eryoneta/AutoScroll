@@ -20,60 +20,67 @@ const KeyboardEvent = {
 	}
 };
 //AUTOSCROLL
+class AutoScroll {
+	//VARS
+	//(ANIMATION LOOP)
+	animationLoop = null;
+	//(TARGETS)
+	target = null;
+	rootTarget = null;
+	hasTarget() {
+		return (this.target !== null || this.rootTarget !== null);
+	}
+	//(ANCHOR)
+	anchor = {
+		x: 0,
+		y: 0
+	}
+	setAnchor(x, y) {
+		this.anchor.x = x;
+		this.anchor.y = y;
+	}
+	//(DIRECTION TO AUTOSROLL)
+	direction = {
+		x: 0,
+		y: 0
+	}
+	setDirection(x, y) {
+		this.direction.x = x;
+		this.direction.y = y;
+	}
+	//(SCROLL DURING ANIMATION)
+	scroll = {
+		xValue: 0,
+		yValue: 0,
+		vertical: {
+			up: () => (this.scroll.yValue--),
+			down: () => (this.scroll.yValue++)
+		},
+		horizontal: {
+			left: () => (this.scroll.xValue--),
+			right: () => (this.scroll.xValue++)
+		},
+		clear: () => (this.verticalScroll.value = 0)
+	}
+	//MAIN
+	constructor() { }
+	//FUNCS
+	clear() {
+		this.animationLoop = null;
+		this.target = null;
+		this.rootTarget = null;
+		this.setAnchor(0, 0);
+		this.setDirection(0, 0);
+		this.verticalScroll.clear();
+	}
+}
+//AUTOSCROLL_ROOT
 class AutoScrollRoot {
 	//VARS
 	view = new AutoScrollView(this);
 	flow = new AutoScrollFlow(this);
 	//(AUTOSCROLL)
-	autoScroll = {
-		//ANIMATION LOOP
-		animationLoop: null,
-		//TARGETS
-		target: null,
-		rootTarget: null,
-		hasTarget: () => (this.autoScroll.target !== null || this.autoScroll.rootTarget !== null),
-		//ANCHOR
-		anchor: {
-			x: 0,
-			y: 0
-		},
-		setAnchor: (x, y) => {
-			this.autoScroll.anchor.x = x;
-			this.autoScroll.anchor.y = y;
-		},
-		//DIRECTION TO AUTOSROLL
-		direction: {
-			x: 0,
-			y: 0
-		},
-		setDirection: (x, y) => {
-			this.autoScroll.direction.x = x;
-			this.autoScroll.direction.y = y;
-		},
-		//SCROLL DURING ANIMATION
-		scroll: {
-			xValue: 0,
-			yValue: 0,
-			vertical: {
-				up: () => (this.autoScroll.scroll.yValue--),
-				down: () => (this.autoScroll.scroll.yValue++)
-			},
-			horizontal: {
-				left: () => (this.autoScroll.scroll.xValue--),
-				right: () => (this.autoScroll.scroll.xValue++)
-			},
-			clear: () => (this.autoScroll.verticalScroll.value = 0)
-		},
-		//FUNCS
-		clear: () => {
-			this.autoScroll.animationLoop = null;
-			this.autoScroll.target = null;
-			this.autoScroll.rootTarget = null;
-			this.autoScroll.setAnchor(0, 0);
-			this.autoScroll.setDirection(0, 0);
-			this.autoScroll.verticalScroll.clear();
-		}
-	};
+	autoScroll = AutoScroll();
 	//(LISTENERS)
 	listeners = {
 		mousedown: (m) => { },
@@ -85,12 +92,12 @@ class AutoScrollRoot {
 	};
 	//MAIN
 	constructor() { }
-	//FUNCS
 	init() {
 		this.view.init();
 		this.flow.init();
 		this._bindListeners();
 	}
+	//FUNCS
 	//(LISTENERS)
 	_bindListeners() {
 		addEventListener("mousedown", (m) => this.listeners.mousedown(m), true);
