@@ -134,7 +134,7 @@ class Anchor {
 //AUTOSCROLL_VIEW
 class AutoScrollView {
 	//VARS
-	root;
+	_root;
 	//(ELEMENTS)
 	htmlTag = document.documentElement;							//USADO PARA DETECTAR SCROLLBAR
 	bodyTag = (document.body ? document.body : this.htmlTag);	//USADO PARA DETECTAR SCROLLBAR
@@ -144,7 +144,7 @@ class AutoScrollView {
 	_anchor = new Anchor();
 	//MAIN
 	constructor(autoScrollRoot) {
-		this.root = autoScrollRoot;
+		this._root = autoScrollRoot;
 	}
 	init() {
 		this._appendAutoScrollToHTML(this.viewElement);
