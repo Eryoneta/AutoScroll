@@ -28,7 +28,10 @@
 				"autoScrollRule.js",
 				"autoScrollFlow.js",
 				"autoScrollView.js",
+				"autoScrollView_Cursor.js",
+				"autoScrollView_Anchor.js",
 				"autoScrollPlan.js",
+				"autoScrollPlan_AutoScroll.js",
 				"injection.js"
 			],
 			"all_frames": false,
