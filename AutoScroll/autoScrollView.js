@@ -1,10 +1,13 @@
 //CURSOR_MODE
 const CursorMode = {
-	FIXED: 0, FREE: 1, HORIZONTAL: 2, VERTICAL: 3
+	FREE: 0,
+	HORIZONTAL: 1,
+	VERTICAL: 2
 };
 //CURSOR
 class Cursor {
 	//VARS
+	cursorImageSize = this._image.size;
 	//(IMAGENS)
 	_image = {
 		basePath: "Scrolls",
@@ -12,18 +15,46 @@ class Cursor {
 			name: "F"	//EX: "Scrolls/F.png"
 		},
 		direction: {
-			center: { name: "M", modes: ["H", "V", "HV"] },
-			up: { name: "C", modes: ["S", "E"] },		//EX: "Scrolls/C/S/2.png"
-			upRight: { name: "C", modes: ["S", "E"] },
-			right: { name: "C", modes: ["S", "E"] },
-			downRight: { name: "C", modes: ["S", "E"] },
-			down: { name: "B", modes: ["S", "E"] },
-			downLeft: { name: "C", modes: ["S", "E"] },
-			left: { name: "C", modes: ["S", "E"] },
-			upLeft: { name: "C", modes: ["S", "E"] }
+			center: {
+				name: "M",
+				modes: { horizontal: { name: "H" }, vertical: { name: "V" }, center: { name: "HV" } }
+			},
+			up: {		//EX: "Scrolls/C/S/2.png"
+				name: "C",
+				modes: { free: { name: "S" }, fixed: { name: "E" } }
+			},
+			upRight: {
+				name: "C",
+				modes: { free: { name: "S" }, fixed: { name: "E" } }
+			},
+			right: {
+				name: "C",
+				modes: { free: { name: "S" }, fixed: { name: "E" } }
+			},
+			downRight: {
+				name: "C",
+				modes: { free: { name: "S" }, fixed: { name: "E" } }
+			},
+			down: {
+				name: "B",
+				modes: { free: { name: "S" }, fixed: { name: "E" } }
+			},
+			downLeft: {
+				name: "C",
+				modes: { free: { name: "S" }, fixed: { name: "E" } }
+			},
+			left: {
+				name: "C",
+				modes: { free: { name: "S" }, fixed: { name: "E" } }
+			},
+			upLeft: {
+				name: "C",
+				modes: { free: { name: "S" }, fixed: { name: "E" } }
+			}
 		},
 		frames: ["1", "2", "3", "4"],
-		fileType: "png"
+		fileType: "png",
+		size: 32
 	}
 	//(ANIMAÇÃO)
 	_animation = {
@@ -33,7 +64,7 @@ class Cursor {
 	}
 	//MAIN
 	constructor() {
-		//NÃO PODEM RECEBER frames ANTES DE INICIAR, APENAS DEPOIS
+		//NÃO PODE RECEBER frames ANTES DE INICIAR, APENAS DEPOIS
 		const frames = this._image.frames;
 		this._animation.frames = [	//BLINK, BLINK-BLINK
 			{ time: 0.000, name: frames[0] },	//BLINK START
@@ -67,11 +98,12 @@ class Cursor {
 		let keyframes = "";
 		for (let dir in this._image.direction) {
 			const direction = this._image.direction[dir];
-			for (let mode of direction.modes) {
-				keyframes += "@keyframes " + direction.name + "_" + mode + " {";		//EX: "@keyframes C_S {"
+			for (let mod in direction.modes) {
+				const mode = direction.modes[mod];
+				keyframes += "@keyframes " + direction.name + "_" + mode.name + " {";		//EX: "@keyframes C_S {"
 				keyframes += "\n";
 				for (let frame of this._animation.frames) {
-					const cursorName = (direction.name + "/" + mode + "/" + frame.name);
+					const cursorName = (direction.name + "/" + mode.name + "/" + frame.name);
 					const cursorPath = this._image.basePath + "/" + cursorName + "." + this._image.fileType;
 					keyframes += ("	" + frame.time + "%{ cursor:url('" + chrome.runtime.getURL(cursorPath) + "')16 16, auto; }");
 					//EX:  "	0.000%{ cursor:url('Scrolls/C/S/1.png')16 16, auto; }"
@@ -86,8 +118,134 @@ class Cursor {
 		viewElement.appendChild(styler);
 	}
 	//(SHOW/HIDE)
-	show(viewElement, mode = CursorMode.FIXED, anchorLocation = { x: 0, y: 0 }, location = { x: 0, y: 0 }) {
-		//TODO
+	show(viewElement, mode = CursorMode.FREE, following = false, anchorLocation = { x: 0, y: 0 }, location = { x: 0, y: 0 }) {
+		const diffX = location.x - anchorLocation.x;
+		const diffY = location.y - anchorLocation.y;
+		const distance = Math.sqrt(diffX * diffX + diffY * diffY);
+		const angle = (diffX < 0 ? 180 : diffY > 0 ? 360 : 0) - (Math.atan(diffY / diffX) / (Math.PI / 180));
+		/* ANGLE: SENTIDO HORÁRIO:
+				90
+			180	o  0
+			   270
+		*/
+		const isResting = this._root.rule.isOutsideRestRadious(distance);	//DENTRO DA ÁREA DE REPOUSO
+		let imageNome = "";
+		let imageMode = "";
+		switch (mode) {
+			case CursorMode.FREE: default:
+				const right = (angle > 0 && angle < 90 && angle > 270 && angle < 360);
+				const upRight = (angle > 0 && angle < 90);
+				const up = (angle > 0 && angle < 90);
+				const upLeft = (angle > 0 && angle < 90);
+				const left = (angle > 0 && angle < 90);
+				const downLeft = (angle > 0 && angle < 90);
+				const down = (angle > 0 && angle < 90);
+				const downRight = (angle > 0 && angle < 90);
+				switch (true) {
+					case isResting:
+						imageNome = this._image.direction.center.name;					//CENTER
+						imageMode = this._image.direction.center.modes.center.name;			//FREE
+						break;
+					case right:
+						imageNome = this._image.direction.right.name;					//RIGHT
+						if (following) {
+							imageMode = this._image.direction.right.modes.free.name;		//FREE
+						} else imageMode = this._image.direction.right.modes.fixed.name;	//FIXED
+						break;
+					case upRight:
+						imageNome = this._image.direction.upRight.name;					//UP-RIGHT
+						if (following) {
+							imageMode = this._image.direction.upRight.modes.free.name;		//FREE
+						} else imageMode = this._image.direction.upRight.modes.fixed.name;	//FIXED
+						break;
+					case up:
+						imageNome = this._image.direction.up.name;						//UP
+						if (following) {
+							imageMode = this._image.direction.up.modes.free.name;			//FREE
+						} else imageMode = this._image.direction.up.modes.fixed.name;		//FIXED
+						break;
+					case upLeft:
+						imageNome = this._image.direction.upLeft.name;					//UP-LEFT
+						if (following) {
+							imageMode = this._image.direction.upLeft.modes.free.name;		//FREE
+						} else imageMode = this._image.direction.upLeft.modes.fixed.name;	//FIXED
+						break;
+					case left:
+						imageNome = this._image.direction.left.name;					//UP-RIGHT
+						if (following) {
+							imageMode = this._image.direction.left.modes.free.name;			//FREE
+						} else imageMode = this._image.direction.left.modes.fixed.name;		//FIXED
+						break;
+					case downLeft:
+						imageNome = this._image.direction.downLeft.name;				//DOWN-LEFT
+						if (following) {
+							imageMode = this._image.direction.downLeft.modes.free.name;		//FREE
+						} else imageMode = this._image.direction.downLeft.modes.fixed.name;	//FIXED
+						break;
+					case down:
+						imageNome = this._image.direction.down.name;					//DOWN
+						if (following) {
+							imageMode = this._image.direction.down.modes.free.name;			//FREE
+						} else imageMode = this._image.direction.down.modes.fixed.name;		//FIXED
+						break;
+					case downRight:
+						imageNome = this._image.direction.downRight.name;				//DOWN-RIGHT
+						if (following) {
+							imageMode = this._image.direction.downRight.modes.free.name;	//FREE
+						} else imageMode = this._image.direction.downRight.modes.fixed.name;//FIXED
+						break;
+				}
+				break;
+			case CursorMode.HORIZONTAL:
+				const pointingRight = (angle > 0 && angle < 90 && angle > 270 && angle < 360);
+				const horizontalCenter = (angle === 90 || angle === 270);
+				const pointingLeft = (angle > 90 && angle < 270);
+				switch (true) {
+					case pointingRight:
+						imageNome = this._image.direction.right.name;					//RIGHT
+						if (following) {
+							imageMode = this._image.direction.right.modes.free.name;		//FREE
+						} else imageMode = this._image.direction.right.modes.fixed.name;	//FIXED
+						break;
+					case isResting:
+					case horizontalCenter:
+						imageNome = this._image.direction.center.name;					//CENTER
+						imageMode = this._image.direction.center.modes.horizontal.name;		//HORIZONTAL
+						break;
+					case pointingLeft:
+						imageNome = this._image.direction.left.name;					//LEFT
+						if (following) {
+							imageMode = this._image.direction.left.modes.free.name;			//FREE
+						} else imageMode = this._image.direction.left.modes.fixed.name;		//FIXED
+						break;
+				}
+				break;
+			case CursorMode.VERTICAL:
+				const pointingUp = (angle > 0 && angle < 180);
+				const verticalCenter = (angle === 0 || angle === 180);
+				const pointingDown = (angle > 0 && angle < 180);
+				switch (true) {
+					case pointingUp:
+						imageNome = this._image.direction.up.name;						//UP
+						if (following) {
+							imageMode = this._image.direction.up.modes.free.name;			//FREE
+						} else imageMode = this._image.direction.up.modes.fixed.name;		//FIXED
+						break;
+					case isResting:
+					case verticalCenter:
+						imageNome = this._image.direction.center.name;					//CENTER
+						imageMode = this._image.direction.center.modes.vertical.name;		//VERTICAL
+						break;
+					case pointingDown:
+						imageNome = this._image.direction.down.name;					//DOWN
+						if (following) {
+							imageMode = this._image.direction.down.modes.free.name;			//FREE
+						} else imageMode = this._image.direction.down.modes.fixed.name;		//FIXED
+						break;
+				}
+				break;
+		}
+		viewElement.style.setProperty("animation-name", imageNome + "_" + imageMode);
 	}
 	hide(viewElement) {
 		viewElement.style.removeProperty("cursor");
@@ -141,6 +299,7 @@ class AutoScrollView {
 	viewElement = document.createElement("div");				//USADO PARA O VISUAL
 	//(CURSOR)
 	_cursor = new Cursor();
+	cursorImageSize = this._cursor.cursorImageSize;
 	_anchor = new Anchor();
 	//MAIN
 	constructor(autoScrollRoot) {
@@ -151,7 +310,7 @@ class AutoScrollView {
 	}
 	//FUNCS
 	//(CURSOR)
-	loadCursor(cursorMode = CursorMode.FREE, anchorLocation = { x: 0, y: 0 }, cursorLocation = { x: 0, y: 0 }) {
+	loadCursor(cursorMode = CursorMode.FIXED, anchorLocation = { x: 0, y: 0 }, cursorLocation = { x: 0, y: 0 }) {
 		setTimeout(() => this._anchor.show(this.viewElement, anchorLocation), 10);		//DELAY PARA APARECER APÓS O CURSOR
 		this._cursor.show(this.viewElement, cursorMode, anchorLocation, cursorLocation);
 	}
