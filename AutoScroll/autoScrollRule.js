@@ -1,7 +1,7 @@
 //AUTOSCROLL_RULE
 class AutoScrollRule {
     //VARS
-    _root;
+    root;
     //(CONSTANTES)
     speedIncremento = 0.125;				    //INCREMENTADOR DE VELOCIDADE
     restRadius = 20;	                        //RAIO DA ÁREA EM QUE NÃO HÁ AUTOSCROLL
@@ -9,10 +9,10 @@ class AutoScrollRule {
     autoScrollPesado = 5;					    //QUANTIDADE DE SCROLLS DADOS EM SCROLL PESADO
     //MAIN
     constructor(autoScrollRoot) {
-        this._root = autoScrollRoot;
+        this.root = autoScrollRoot;
     }
     init() {
-        restRadius = (this._root.view.cursorImageSize / 2) + 5;
+        this.restRadius = (this.root.view.cursorImageSize / 2) + 5;
     }
     //FUNCS
     //(SCROLL_VALIDATION)
@@ -33,8 +33,8 @@ class AutoScrollRule {
     }
     //(ELEMENT_VALIDATION)
     isElementValid(mouseEvent) {
-        return (mouseEvent.clientX < this._root.view.htmlTag.clientWidth &&
-            mouseEvent.clientY < this._root.view.htmlTag.clientHeight &&
+        return (mouseEvent.clientX < this.root.view.htmlTag.clientWidth &&
+            mouseEvent.clientY < this.root.view.htmlTag.clientHeight &&
             this._isElementValid(mouseEvent.target));
     }
     _isElementValid(element) {
@@ -50,7 +50,7 @@ class AutoScrollRule {
         return false;
     }
     isElementNotABase(element) {
-        if (element !== document && element !== this._root.view.htmlTag && element !== this._root.view.bodyTag) return true;	//DOC/HTML/BODY
+        if (element !== document && element !== this.root.view.htmlTag && element !== this.root.view.bodyTag) return true;	//DOC/HTML/BODY
         return false;
     }
     //(CURSOR_VALIDATION)

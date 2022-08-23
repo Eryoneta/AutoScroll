@@ -1,55 +1,99 @@
 //AUTOSCROLL
 class AutoScroll {
     //VARS
-    //(ANIMATION LOOP)
-    autoScrollLoop = null;
+    plan;
     //(TARGETS)
-    target = null;
-    rootTarget = null;
-    hasTarget() {
-        return (this.target !== null || this.rootTarget !== null);
+    _target = null;
+    _rootTarget = null;
+    setElement(element) {
+        if (!this.root.rule.isElementValid(element)) return;
+        this._target = this._getElementWithScroll(element);
+        this._rootTarget = this._getRootElementWithScroll(element);
+        if (this._target === null) this._target = this._rootTarget;
+        if (this._rootTarget === null) this._rootTarget = this._target;
     }
+    _getElementWithScroll(element) {
+
+        console.log(element);   //TEMP
+        console.log(window);    //TEMP
+
+        if (!this.plan.root.rule.isElementNotWindow(element)) return null;
+        if (!this.plan.root.rule.scrollHasToBeAllowed(element)) return null;
+        if (!this.plan.root.rule.isInNeedOfScroll(element)) return null;
+        if (!this.plan.root.rule.isElementNotABase(element)) return null;
+        return this._getElementWithScroll(element.parentNode);		//PASSA PARA VERIFICAR O ELEMENTO-PAI
+    }
+    _getRootElementWithScroll(element) {
+        if (!this.plan.root.rule.isElementNotABase(element)) return this._getElementWithScroll(element);
+        if (this._getElementWithScroll(element.parentNode) !== null) {
+            return this._getRootElementWithScroll(element.parentNode);
+        } else return this._getElementWithScroll(element);
+    }
+    hasTarget() {
+        return (this._target !== null || this._rootTarget !== null);
+    }
+    _runRootTarget = null;
     //(ANCHOR)
-    anchor = {
+    _anchor = {
         x: 0,
         y: 0
     }
     setAnchor(x, y) {
-        this.anchor.x = x;
-        this.anchor.y = y;
+        this._anchor.x = x;
+        this._anchor.y = y;
     }
     //(DIRECTION TO AUTOSROLL)
-    direction = {
+    _direction = {
         x: 0,
         y: 0
     }
     setDirection(x, y) {
-        this.direction.x = x;
-        this.direction.y = y;
+        this._direction.x = x;
+        this._direction.y = y;
     }
     //(SCROLL DURING ANIMATION)
-    scroll = {
+    _scroll = {
         xValue: 0,
         yValue: 0,
         vertical: {
-            up: () => (this.scroll.yValue--),
-            down: () => (this.scroll.yValue++)
+            up: () => (this._scroll.yValue--),
+            down: () => (this._scroll.yValue++)
         },
         horizontal: {
-            left: () => (this.scroll.xValue--),
-            right: () => (this.scroll.xValue++)
+            left: () => (this._scroll.xValue--),
+            right: () => (this._scroll.xValue++)
         },
-        clear: () => (this.verticalScroll.value = 0)
+        clear: () => {
+            this._scroll.xValue = 0;
+            this._scroll.yValue = 0;
+        }
+    }
+    //(ANIMATION)
+    _autoScrollLoop = () => { };
+    startAutoScrolling() {
+        this._autoScrollLoop();
+    }
+    stopAutoScrolling() {
+        window.cancelAnimationFrame(this._autoScrollLoop);
+    }
+    _autoScrollLoop() {
+        //É chamada por um dos States
+        //Permite mudar o State enquanto ocorre, mudando seu comportamento
+
+        this._autoScrollLoop = window.requestAnimationFrame(this._autoScrollLoop);	//LOOP
     }
     //MAIN
-    constructor() { }
+    constructor(autoScrollPlan) {
+        this.plan = autoScrollPlan;
+    }
     //FUNCS
     clear() {
-        this.autoScrollLoop = null;
-        this.target = null;
-        this.rootTarget = null;
+        this._autoScrollLoop = () => { };
+        this._target = null;
+        this._rootTarget = null;
+        this._runRootTarget = null;
         this.setAnchor(0, 0);
         this.setDirection(0, 0);
-        this.verticalScroll.clear();
+        this._scroll.clear();
     }
 }

@@ -22,7 +22,7 @@ const KeyboardEvent = {
 //AUTOSCROLL_PLAN
 class AutoScrollPlan {
     //VARS
-    _root;
+    root;
     //(AUTOSCROLL)
     autoScroll = AutoScroll();
     //(LISTENERS)
@@ -36,7 +36,7 @@ class AutoScrollPlan {
     };
     //MAIN
     constructor(autoScrollRoot) {
-        this._root = autoScrollRoot;
+        this.root = autoScrollRoot;
     }
     init() {
         this._bindListeners();
@@ -73,43 +73,5 @@ class AutoScrollPlan {
         removeEventListener("keydown", this.stopEvent, true);
         removeEventListener("keyup", this.stopEvent, true);
         removeEventListener("contextmenu", this.stopEvent, true);	//PERMITE DEFAUL_TOOLBOX
-    }
-    //(LOCALIZAR SCROLLBAR)
-    setAutoScrollElement(element) {
-        if(!this.root.rule.isElementValid(element))return;
-        this.autoScroll.target = this._getElementWithScroll(element);
-        this.autoScroll.rootTarget = this._getRootElementWithScroll(element);
-        if (this.autoScroll.target === null) this.autoScroll.target = this.autoScroll.rootTarget;
-        if (this.autoScroll.rootTarget === null) this.autoScroll.rootTarget = this.autoScroll.target;
-    }
-    _getElementWithScroll(element) {
-
-        console.log(element);   //TEMP
-        console.log(window);    //TEMP
-
-        if (!this._root.rule.isElementNotWindow(element)) return null;
-        if (!this._root.rule.scrollHasToBeAllowed(element)) return null;
-        if (!this._root.rule.isInNeedOfScroll(element)) return null;
-        if (!this._root.rule.isElementNotABase(element)) return null;
-        return this._getElementWithScroll(element.parentNode);		//PASSA PARA VERIFICAR O ELEMENTO-PAI
-    }
-    _getRootElementWithScroll(element) {
-        if (!this._root.rule.isElementNotABase(element)) return this._getElementWithScroll(element);
-        if (this._getElementWithScroll(element.parentNode) !== null) {
-            return this._getRootElementWithScroll(element.parentNode);
-        } else return this._getElementWithScroll(element);
-    }
-    //(ANIMAÇÃO)
-    startAutoScroll() {
-        this._autoScrollLoop();
-    }
-    stopAutoScroll() {
-        window.cancelAnimationFrame(this.autoScroll.autoScrollLoop);
-    }
-    _autoScrollLoop() {
-        //É chamada por um dos States
-        //Permite mudar o State enquanto ocorre, mudando seu comportamento
-        //
-        this.autoScroll.autoScrollLoop = window.requestAnimationFrame(this._autoScrollLoop);	//LOOP
     }
 }

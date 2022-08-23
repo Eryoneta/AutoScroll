@@ -1,6 +1,7 @@
 //ANCHOR
 class Anchor {
 	//VARS
+	view;
 	//(IMAGENS)
 	_image = {
 		basePath: "Scrolls",
@@ -8,6 +9,10 @@ class Anchor {
 			name: "F"	//EX: "Scrolls/F.png"
 		},
 		fileType: "png"
+	}
+	//MAIN
+	constructor(autoScrollView) {
+		this.view = autoScrollView;
 	}
 	//FUNCS
 	//(INJECT)

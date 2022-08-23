@@ -7,18 +7,18 @@ const CursorMode = {
 //AUTOSCROLL_VIEW
 class AutoScrollView {
 	//VARS
-	_root;
+	root;
 	//(ELEMENTS)
 	htmlTag = document.documentElement;							//USADO PARA DETECTAR SCROLLBAR
 	bodyTag = (document.body ? document.body : this.htmlTag);	//USADO PARA DETECTAR SCROLLBAR
 	viewElement = document.createElement("div");				//USADO PARA O VISUAL
 	//(CURSOR)
-	_cursor = new Cursor();
+	_cursor = new Cursor(this);
+	_anchor = new Anchor(this);
 	cursorImageSize = this._cursor.cursorImageSize;
-	_anchor = new Anchor();
 	//MAIN
 	constructor(autoScrollRoot) {
-		this._root = autoScrollRoot;
+		this.root = autoScrollRoot;
 	}
 	init() {
 		this._appendAutoScrollToHTML(this.viewElement);

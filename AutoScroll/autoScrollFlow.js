@@ -14,11 +14,11 @@ const State = {
 //AUTOSCROLL_FLOW
 class AutoScrollFlow {
 	//VARS
-	_root;
+	root;
 	_states = {};
 	//MAIN
 	constructor(autoScrollRoot) {
-		this._root = autoScrollRoot;
+		this.root = autoScrollRoot;
 	}
 	init() {
 		this._loadFlow();
@@ -28,12 +28,12 @@ class AutoScrollFlow {
 	//(STATES)
 	setState(state) {
 		const node = this._states[state];
-		this._root.listeners.mousedown = node.mousedown;
-		this._root.listeners.mouseup = node.mouseup;
-		this._root.listeners.wheel = node.wheel;
-		this._root.listeners.mousemove = node.mousemove;
-		this._root.listeners.keydown = node.keydown;
-		this._root.listeners.keyup = node.keyup;
+		this.root.listeners.mousedown = node.mousedown;
+		this.root.listeners.mouseup = node.mouseup;
+		this.root.listeners.wheel = node.wheel;
+		this.root.listeners.mousemove = node.mousemove;
+		this.root.listeners.keydown = node.keydown;
+		this.root.listeners.keyup = node.keyup;
 		node.statechange();		//EXECUTA NODE_CHANGE
 	}
 	_addState(state,
@@ -63,17 +63,19 @@ class AutoScrollFlow {
 		//[INACTIVE]
 		this._addState(State.INACTIVE, {
 			mousedown: (m) => {
-				if (MouseEvent.match(m, MouseEvent.MIDDLE)) {
-					this._root.plan.setAutoScrollElement(m.target);
-					if (this._root.plan.autoScroll.hasTarget()) {
-						this._root.plan.stopEvent(m);
-						this._root.plan.autoScroll.setAnchor(m.clientX, m.clientY);
-						this._root.plan.disableDefaultActions();
-						this._root.plan.startAutoScroll();
-						this.setState(State.WAITING + State.INACTIVE);
-					}
-				} else if (MouseEvent.match(m, MouseEvent.RIGHT)) {
-
+				switch (true) {
+					case MouseEvent.match(m, MouseEvent.MIDDLE):
+						this.root.plan.setAutoScrollElement(m.target);
+						if (this.root.plan.autoScroll.hasTarget()) {
+							this.root.plan.stopEvent(m);
+							this.root.plan.autoScroll.setAnchor(m.clientX, m.clientY);
+							this.root.plan.disableDefaultActions();
+							this.root.plan.autoScroll.startAutoScroll();
+							this.setState(State.WAITING + State.INACTIVE);
+						}
+						break;
+					case MouseEvent.match(m, MouseEvent.RIGHT):
+						break;
 				}
 			}
 		});

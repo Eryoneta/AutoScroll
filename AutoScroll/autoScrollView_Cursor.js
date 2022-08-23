@@ -1,6 +1,7 @@
 //CURSOR
 class Cursor {
 	//VARS
+	view;
 	cursorImageSize = this._image.size;
 	//(IMAGENS)
 	_image = {
@@ -57,7 +58,8 @@ class Cursor {
 		iterationCount: "infinite"
 	}
 	//MAIN
-	constructor() {
+	constructor(autoScrollView) {
+		this.view = autoScrollView;
 		//NÃO PODE RECEBER frames ANTES DE INICIAR, APENAS DEPOIS
 		const frames = this._image.frames;
 		this._animation.frames = [	//BLINK, BLINK-BLINK
