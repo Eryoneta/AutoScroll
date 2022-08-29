@@ -244,7 +244,7 @@ class Cursor {
 		viewElement.style.setProperty("animation-name", imageNome + "_" + imageMode);
 	}
 	hide(viewElement) {
+		viewElement.style.removeProperty("animationName");
 		viewElement.style.removeProperty("cursor");
-		viewElement.style.removeProperty("animationName");		//TODO: CHECK!
 	}
 }

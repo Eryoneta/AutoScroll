@@ -5,7 +5,7 @@ class AutoScrollRule {
     //(CONSTANTES)
     speedIncremento = 0.125;				    //INCREMENTADOR DE VELOCIDADE
     restRadius = 20;	                        //RAIO DA ÁREA EM QUE NÃO HÁ AUTOSCROLL
-    speedControle = 8;						    //DIVIDE A VELOCIDADE
+    speedControl = 8;						    //DIVIDE A VELOCIDADE
     autoScrollPesado = 5;					    //QUANTIDADE DE SCROLLS DADOS EM SCROLL PESADO
     //MAIN
     constructor(autoScrollRoot) {
@@ -32,25 +32,31 @@ class AutoScrollRule {
         return (element.scrollHeight > element.clientHeight);
     }
     //(ELEMENT_VALIDATION)
-    isElementValid(mouseEvent) {
-        return (mouseEvent.clientX < this.root.view.htmlTag.clientWidth &&
-            mouseEvent.clientY < this.root.view.htmlTag.clientHeight &&
-            this._isElementValid(mouseEvent.target));
+    isElementValid(element) {
+        if (this.isElementWindow(element)) return false;                //NOT - WINDOW
+        if (this.isElementABase(element)) return true;                  //YES - DOC/HTML/BODY
+        if (element.isContentEditable) return false;					//NOT - EDITORES
+        if (element.localName === "a" && element.href) return false;	//NOT - <A> COM LINK
+        if (element.localName === "textarea") return false;				//NOT - <TEXTAREA>
+        if (element.localName === "input") return false;				//NOT - <INPUT>
     }
-    _isElementValid(element) {
-        if (!this.isElementNotABase(element)) return true;
-        if (element.isContentEditable) return false;					//EDITORES
-        if (element.localName === "a" && element.href) return false;	//<A> COM LINK
-        if (element.localName === "textarea") return false;				//<TEXTAREA>
-        if (element.localName === "input") return false;				//<INPUT>
-        return this._isElementValid(element.parentNode);			//PASSA PARA VERIFICAR O ELEMENTO-PAI
+    isElementWindow(element) {
+        return (element === window);
     }
-    isElementNotWindow(element) {
-        if (element !== window) return true;
-        return false;
+    isElementDocument(element) {
+        return (element === document);
     }
-    isElementNotABase(element) {
-        if (element !== document && element !== this.root.view.htmlTag && element !== this.root.view.bodyTag) return true;	//DOC/HTML/BODY
+    isElementHTML(element) {
+        return (element === document.documentElement);
+    }
+    isElementBody(element) {
+        return (element === document.body);
+    }
+    isElementABase(element) {
+        if (this.isElementBody(element)) return true;
+        if (this.isElementHTML(element)) return true;
+        if (this.isElementDocument(element)) return true;
+        if (this.isElementWindow(element)) return true;
         return false;
     }
     //(CURSOR_VALIDATION)

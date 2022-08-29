@@ -9,8 +9,6 @@ class AutoScrollView {
 	//VARS
 	root;
 	//(ELEMENTS)
-	htmlTag = document.documentElement;							//USADO PARA DETECTAR SCROLLBAR
-	bodyTag = (document.body ? document.body : this.htmlTag);	//USADO PARA DETECTAR SCROLLBAR
 	viewElement = document.createElement("div");				//USADO PARA O VISUAL
 	//(CURSOR)
 	_cursor = new Cursor(this);
@@ -25,9 +23,9 @@ class AutoScrollView {
 	}
 	//FUNCS
 	//(CURSOR)
-	loadCursor(cursorMode = CursorMode.FIXED, anchorLocation = { x: 0, y: 0 }, cursorLocation = { x: 0, y: 0 }) {
+	loadCursor(cursorMode = CursorMode.FIXED, following = false, anchorLocation = { x: 0, y: 0 }, cursorLocation = { x: 0, y: 0 }) {
 		setTimeout(() => this._anchor.show(this.viewElement, anchorLocation), 10);		//DELAY PARA APARECER APÓS O CURSOR
-		this._cursor.show(this.viewElement, cursorMode, anchorLocation, cursorLocation);
+		this._cursor.show(this.viewElement, following, cursorMode, anchorLocation, cursorLocation);
 	}
 	unloadCursor() {
 		this._anchor.hide(this.viewElement);
@@ -35,7 +33,7 @@ class AutoScrollView {
 	}
 	//(INJEÇÃO)
 	_appendAutoScrollToHTML(viewElement) {
-		this.htmlTag.appendChild(this._createAutoScrollTag(viewElement));
+		document.documentElement.appendChild(this._createAutoScrollTag(viewElement));
 	}
 	_createAutoScrollTag(viewElement) {
 		const autoScrollTag = document.createElement("auto-scroll");

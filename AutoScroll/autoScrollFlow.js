@@ -25,6 +25,23 @@ class AutoScrollFlow {
 		this.setState(State.INACTIVE);
 	}
 	//FUNCS
+	//(SHORTCUTS)
+	_loadCursor(element, following) {
+		const isInNeedOfScrollX = this.root.rule.isInNeedOfScrollX(element);
+		const isInNeedOfScrollY = this.root.rule.isInNeedOfScrollY(element);
+		const isInNeedOfBothScroll = (isInNeedOfScrollX && isInNeedOfScrollY);
+		switch (true) {
+			case isInNeedOfBothScroll:
+				this.root.plan.loadCursor(CursorMode.FREE, following, this.root.plan.autoScroll.getAnchor(), this.root.plan.autoScroll.getCursor());
+				break;
+			case isInNeedOfScrollX:
+				this.root.plan.loadCursor(CursorMode.HORIZONTAL, following, this.root.plan.autoScroll.getAnchor(), this.root.plan.autoScroll.getCursor());
+				break;
+			case isInNeedOfScrollY:
+				this.root.plan.loadCursor(CursorMode.VERTICAL, following, this.root.plan.autoScroll.getAnchor(), this.root.plan.autoScroll.getCursor());
+				break;
+		}
+	}
 	//(STATES)
 	setState(state) {
 		const node = this._states[state];
@@ -62,27 +79,64 @@ class AutoScrollFlow {
 	_loadFlow() {
 		//[INACTIVE]
 		this._addState(State.INACTIVE, {
+			statechange: () => {
+				this.root.plan.autoScroll.clear();	//RESETA TUDO
+			},
 			mousedown: (m) => {
 				switch (true) {
 					case MouseEvent.match(m, MouseEvent.MIDDLE):
-						this.root.plan.setAutoScrollElement(m.target);
-						if (this.root.plan.autoScroll.hasTarget()) {
-							this.root.plan.stopEvent(m);
-							this.root.plan.autoScroll.setAnchor(m.clientX, m.clientY);
-							this.root.plan.disableDefaultActions();
-							this.root.plan.autoScroll.startAutoScroll();
-							this.setState(State.WAITING + State.INACTIVE);
-						}
+						this.root.plan.autoScroll.loadTargetsWithScrollableElements(m.target);	//PARA O DRAG
+						if (!this.root.plan.autoScroll.hasTargets()) return;
+						this.root.plan.stopEvent(m);
+						this.root.plan.disableDefaultActions();
+						this.root.plan.autoScroll.setAnchor(m.clientX, m.clientY);
+						this.root.plan.autoScroll.setCursor(m.clientX, m.clientY);
+						this.setState(State.WAITING + State.INACTIVE);
 						break;
 					case MouseEvent.match(m, MouseEvent.RIGHT):
+
 						break;
 				}
 			}
 		});
 		//[WAITING+INACTIVE]
 		this._addState(State.WAITING + State.INACTIVE, {
+			mouseup: (m) => {
+				switch (true) {
+					case MouseEvent.match(m, MouseEvent.MIDDLE):
+						this.root.plan.autoScroll.loadTargetsWithScrollableElements(m.target);
+						if (!this.root.plan.autoScroll.hasTargets()) return;
+						this.root.plan.autoScroll.setAnchor(m.clientX, m.clientY);
+						this.root.plan.autoScroll.setCursor(m.clientX, m.clientY);
+						this.setState(State.AUTO_DRAGGING);
+						break;
+				}
+			},
+			mousemove: (m) => {
+				this.root.plan.autoScroll.setCursor(m.clientX, m.clientY);
+				if (this.root.plan.autoScroll.isOutsideRestRadious()) this.setState(State.DRAGGING);
+			}
+		});
+		//[AUTO_DRAGGING]
+		this._addState(State.AUTO_DRAGGING, {
 			statechange: () => {
-				alert("STATUS CHANGED!");
+				this.root.plan.autoScroll.startAutoDrag();
+				this._loadCursor(this.root.plan.autoScroll.getRootTarget(), true);
+			},
+			mousemove: (m) => {
+				this.root.plan.autoScroll.setCursor(m.clientX, m.clientY);
+				this._loadCursor(this.root.plan.autoScroll.getRootTarget(), true);
+			}
+		});
+		//[DRAGGING]
+		this._addState(State.DRAGGING, {
+			statechange: () => {
+				this.root.plan.autoScroll.startAutoDrag();
+				this._loadCursor(this.root.plan.autoScroll.getForegroundTarget(), true);
+			},
+			mousemove: (m) => {
+				this.root.plan.autoScroll.setCursor(m.clientX, m.clientY);
+				this._loadCursor(this.root.plan.autoScroll.getForegroundTarget(), true);
 			}
 		});
 	}

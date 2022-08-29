@@ -3,36 +3,46 @@ class AutoScroll {
     //VARS
     plan;
     //(TARGETS)
-    _target = null;
+    _foreTarget = null;
     _rootTarget = null;
-    setElement(element) {
-        if (!this.root.rule.isElementValid(element)) return;
-        this._target = this._getElementWithScroll(element);
+    loadTargetsWithScrollableElements(element) {
+        this.clearTargets();
+        this._foreTarget = this._getElementWithScroll(element);
         this._rootTarget = this._getRootElementWithScroll(element);
-        if (this._target === null) this._target = this._rootTarget;
-        if (this._rootTarget === null) this._rootTarget = this._target;
+        if (this._foreTarget === null) this._foreTarget = this._rootTarget;
+        if (this._rootTarget === null) this._rootTarget = this._foreTarget;
     }
     _getElementWithScroll(element) {
-
-        console.log(element);   //TEMP
-        console.log(window);    //TEMP
-
-        if (!this.plan.root.rule.isElementNotWindow(element)) return null;
-        if (!this.plan.root.rule.scrollHasToBeAllowed(element)) return null;
-        if (!this.plan.root.rule.isInNeedOfScroll(element)) return null;
-        if (!this.plan.root.rule.isElementNotABase(element)) return null;
-        return this._getElementWithScroll(element.parentNode);		//PASSA PARA VERIFICAR O ELEMENTO-PAI
+        if (this.plan.root.rule.isElementWindow(element)) return null;
+        if (!this.root.rule.isElementValid(element)) return this._getElementWithScroll(element.parentNode);
+        if (this.plan.root.rule.isElementABase(element)) return element;
+        if (!this.plan.root.rule.scrollHasToBeAllowed(element)) return this._getElementWithScroll(element.parentNode);
+        if (!this.plan.root.rule.isInNeedOfScroll(element)) return this._getElementWithScroll(element.parentNode);
+        return element;
     }
-    _getRootElementWithScroll(element) {
-        if (!this.plan.root.rule.isElementNotABase(element)) return this._getElementWithScroll(element);
-        if (this._getElementWithScroll(element.parentNode) !== null) {
+    _getRootElementWithScroll() {
+        if (this.plan.root.rule.isElementWindow(element)) return null;
+        if (!this.root.rule.isElementValid(element)) return this._getElementWithScroll(element.parentNode);
+        if (this.plan.root.rule.isElementABase(element)) return element;
+        if (!this.plan.root.rule.scrollHasToBeAllowed(element)) return this._getRootElementWithScroll(element.parentNode);
+        if (!this.plan.root.rule.isInNeedOfScroll(element)) return this._getRootElementWithScroll(element.parentNode);
+        if (this._getRootElementWithScroll(element.parentNode) !== null) {
             return this._getRootElementWithScroll(element.parentNode);
-        } else return this._getElementWithScroll(element);
+        } else return element;
     }
     hasTarget() {
-        return (this._target !== null || this._rootTarget !== null);
+        return (this._foreTarget !== null || this._rootTarget !== null);
     }
-    _runRootTarget = null;
+    getForegroundTarget() {
+        return this._foreTarget;
+    }
+    getRootTarget() {
+        return this._rootTarget;
+    }
+    clearTargets() {
+        this._foreTarget = null;
+        this._rootTarget = null;
+    }
     //(ANCHOR)
     _anchor = {
         x: 0,
@@ -42,58 +52,112 @@ class AutoScroll {
         this._anchor.x = x;
         this._anchor.y = y;
     }
-    //(DIRECTION TO AUTOSROLL)
-    _direction = {
+    getAnchor() {
+        return _anchor;
+    }
+    //(CURSOR)
+    _cursor = {
         x: 0,
         y: 0
     }
-    setDirection(x, y) {
-        this._direction.x = x;
-        this._direction.y = y;
+    setCursor(x, y) {
+        this._cursor.x = x;
+        this._cursor.y = y;
+    }
+    getCursor() {
+        return _cursor;
+    }
+    //(DIRECTION TO AUTOSCROLL)
+    _autoScroll = {
+        deltaX: 0,
+        deltaY: 0
+    }
+    setAutoScroll(x, y) {
+        this._autoScroll.deltaX = x;
+        this._autoScroll.deltaY = y;
+    }
+    getAutoScroll() {
+        return _autoScroll;
     }
     //(SCROLL DURING ANIMATION)
     _scroll = {
-        xValue: 0,
-        yValue: 0,
-        vertical: {
-            up: () => (this._scroll.yValue--),
-            down: () => (this._scroll.yValue++)
-        },
-        horizontal: {
-            left: () => (this._scroll.xValue--),
-            right: () => (this._scroll.xValue++)
-        },
-        clear: () => {
-            this._scroll.xValue = 0;
-            this._scroll.yValue = 0;
-        }
+        deltaX: 0,
+        deltaY: 0
+    }
+    setScroll(x, y) {
+        this._scroll.deltaX = x;
+        this._scroll.deltaY = y;
+    }
+    getScroll() {
+        return _scroll;
     }
     //(ANIMATION)
-    _autoScrollLoop = () => { };
-    startAutoScrolling() {
-        this._autoScrollLoop();
+    _loop = () => { };
+    startAutoDrag() {
+        this.stop();
+        if(this.hasTarget()) this._autoDragLoop();
     }
-    stopAutoScrolling() {
-        window.cancelAnimationFrame(this._autoScrollLoop);
+    startAutoScroll() {
+        this.stop();
+        if(this.hasTarget()) this._autoScrollLoop();
+    }
+    stop() {
+        window.cancelAnimationFrame(this._loop);
+    }
+    _autoDragLoop() {
+        let deltaX = 0;
+        let deltaY = 0;
+        if (this.isOutsideRestRadious()) {
+            deltaX = diffX / this.plan.root.rule.speedControl;
+            deltaY = diffY / this.plan.root.rule.speedControl;
+        }
+        this._loopEngine(this._foreTarget, deltaX, deltaY);
+        this._loop = window.requestAnimationFrame(this._autoDragLoop);
     }
     _autoScrollLoop() {
-        //É chamada por um dos States
-        //Permite mudar o State enquanto ocorre, mudando seu comportamento
-
-        this._autoScrollLoop = window.requestAnimationFrame(this._autoScrollLoop);	//LOOP
+        this._loopEngine(this._rootTarget, this._autoScroll.deltaX, this._autoScroll.deltaY);
+        this._loop = window.requestAnimationFrame(this._autoScrollLoop);
+    }
+    _loopEngine(element, deltaX, deltaY) {
+        const isWindow = !this.plan.root.rule.isElementWindow(element);
+        let scrollX = (isWindow ? element.scrollX : element.scrollLeft);
+        let scrollY = (isWindow ? element.scrollY : element.scrollTop);
+        //AUTOSCROLL/AUTODRAG
+        scrollX += deltaX;
+        scrollY += deltaY;
+        //APLICA SCROLL DURANTE LOOP
+        scrollX += this._scroll.xValue;
+        scrollY += this._scroll.yValue;
+        this._scroll.setScroll(0, 0);
+        //LIMITA SCROLL NA TELA
+        const scrollWidth = element.scrollWidth - element.clientWidth;
+        const scrollHeight = element.scrollHeight - element.clientHeight;
+        scrollX = Math.max(0, Math.min(scrollX, scrollWidth));      //TODO: CHECAR SE REALMENTE O LIMITA
+        scrollY = Math.max(0, Math.min(scrollY, scrollHeight));     //TODO: CHECAR SE REALMENTE O LIMITA
+        //MOVE SCROLL
+        if (!isWindow) {
+            element.scrollLeft = scrollX;
+            element.scrollTop = scrollY;
+        } else window.scroll(scrollX, scrollY);
     }
     //MAIN
     constructor(autoScrollPlan) {
         this.plan = autoScrollPlan;
     }
     //FUNCS
+    isOutsideRestRadious() {
+        const diffX = this._cursor.x - this._anchor.x;
+        const diffY = this._cursor.y - this._anchor.y;
+        const distancia = Math.sqrt(diffX * diffX + diffY * diffY);
+        return this.plan.root.rule.isOutsideRestRadious(distancia);
+    }
     clear() {
-        this._autoScrollLoop = () => { };
-        this._target = null;
+        this._loop = () => { };
+        this._foreTarget = null;
         this._rootTarget = null;
-        this._runRootTarget = null;
         this.setAnchor(0, 0);
-        this.setDirection(0, 0);
-        this._scroll.clear();
+        this.setCursor(0, 0);
+        this.setAutoScroll(0, 0);
+        this.setScroll(0, 0);
     }
 }
