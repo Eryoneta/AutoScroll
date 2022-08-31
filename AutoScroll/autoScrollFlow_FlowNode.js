@@ -15,11 +15,11 @@ const State = {
 class FlowNode {
 	//VARS
 	state = State.INACTIVE;
-	statechange = () => { };
+	stateload = () => { };
 	listeners = new ListenerBundle();
 	//MAIN
 	constructor(state, {
-		statechange = () => { },
+		stateload = () => { },
 		mousedown = () => { },
 		mouseup = () => { },
 		wheel = () => { },
@@ -28,7 +28,7 @@ class FlowNode {
 		keyup = () => { }
 	}) {
 		this.state = state;
-		this.statechange = statechange;
+		this.stateload = stateload;
 		this.listeners.mousedown = mousedown;
 		this.listeners.mouseup = mouseup;
 		this.listeners.wheel = wheel;

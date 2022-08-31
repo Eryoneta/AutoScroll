@@ -33,7 +33,7 @@ class AutoScrollFlow {
 	setState(state = State.INACTIVE) {
 		const node = this._states[state];
 		this.root.plan.listenerBundle.setListeners(node.listenerBundle);
-		node.statechange();		//EXECUTA NODE_CHANGE
+		node.stateload();		//EXECUTA NODE_CHANGE
 	}
 	_addState(node = new FlowNode()) {
 		this._states[node.state] = node;
@@ -41,13 +41,13 @@ class AutoScrollFlow {
 	_loadFlow() {
 		//[INACTIVE]
 		this._addState(new FlowNode(State.INACTIVE, {
-			statechange: () => {
+			stateload: () => {
 				this.root.plan.autoScroll.clear();	//RESETA TUDO
 			},
 			mousedown: (m) => {
 				switch (true) {
 					case MouseEvent.match(m, MouseEvent.MIDDLE):
-						this.root.plan.autoScroll.loadTargetsWithScrollableElements(m.target);	//PARA O DRAG
+						this.root.plan.autoScroll.loadTargetsWithScrollableElements(m.target);	//PARA O DRAG FUNCIONAR
 						if (!this.root.plan.autoScroll.hasTargets()) return;
 						this.root.plan.stopEvent(m);
 						this.root.plan.disableDefaultActions();
@@ -81,7 +81,7 @@ class AutoScrollFlow {
 		}));
 		//[AUTO_DRAGGING]
 		this._addState(new FlowNode(State.AUTO_DRAGGING, {
-			statechange: () => {
+			stateload: () => {
 				this.root.plan.autoScroll.startAutoDrag();
 				this._loadCursor(this.root.plan.autoScroll.getRootTarget(), true);
 			},
@@ -92,7 +92,7 @@ class AutoScrollFlow {
 		}));
 		//[DRAGGING]
 		this._addState(new FlowNode(State.DRAGGING, {
-			statechange: () => {
+			stateload: () => {
 				this.root.plan.autoScroll.startAutoDrag();
 				this._loadCursor(this.root.plan.autoScroll.getForegroundTarget(), true);
 			},

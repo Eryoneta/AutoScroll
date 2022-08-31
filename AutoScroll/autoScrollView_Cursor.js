@@ -88,10 +88,9 @@ class Cursor {
 			{ time: 100.0, name: frames[0] }	//BLINK END
 		];
 	}
-	init() { }
 	//FUNCS
 	//(INJECT)
-	injectCursorStyle(element) {
+	injectCursor(element) {
 		this._element = element;
 		_element.style.setProperty("animation-duration", this._animation.duration);
 		_element.style.setProperty("animation-iteration-count", this._animation.iterationCount);

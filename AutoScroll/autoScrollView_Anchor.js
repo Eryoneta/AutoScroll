@@ -15,10 +15,9 @@ class Anchor {
 	constructor(autoScrollView) {
 		this.view = autoScrollView;
 	}
-	init() { }
 	//FUNCS
 	//(INJECT)
-	injectAnchorStyle(element) {
+	injectAnchor(element) {
 		this._element = element;
 		_element.style.setProperty("transform", "translateZ(0)");
 		_element.style.setProperty("display", "none");

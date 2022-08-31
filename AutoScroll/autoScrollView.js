@@ -19,8 +19,6 @@ class AutoScrollView {
 	}
 	init() {
 		this._appendAutoScrollToHTML(this.viewElement);
-		this.cursor.init();
-		this.anchor.init();
 	}
 	//FUNCS
 	//(CURSOR)
@@ -33,15 +31,15 @@ class AutoScrollView {
 		setTimeout(() => this.cursor.hide(), 10);	//DELAY PARA DESAPARECER APÓS O FUNDO
 	}
 	//(INJEÇÃO)
-	_appendAutoScrollToHTML(viewElement) {
-		document.documentElement.appendChild(this._createAutoScrollTag(viewElement));
+	_appendAutoScrollToHTML(element) {
+		document.documentElement.appendChild(this._createAutoScrollTag(element));
 	}
-	_createAutoScrollTag(viewElement) {
+	_createAutoScrollTag(element) {
 		const autoScrollTag = document.createElement("auto-scroll");
 		const autoScrollTagShadow = autoScrollTag.attachShadow({ mode: "open" });
-		this.anchor.injectAnchorStyle(viewElement);
-		this.cursor.injectCursorStyle(viewElement);
-		autoScrollTagShadow.appendChild(viewElement);
+		this.anchor.injectAnchor(element);
+		this.cursor.injectCursor(element);
+		autoScrollTagShadow.appendChild(element);
 		return autoScrollTag;
 	}
 }
