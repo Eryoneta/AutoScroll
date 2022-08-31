@@ -30,7 +30,7 @@ class AutoScroll {
             return this._getRootElementWithScroll(element.parentNode);
         } else return element;
     }
-    hasTarget() {
+    hasTargets() {
         return (this._foreTarget !== null || this._rootTarget !== null);
     }
     getForegroundTarget() {
@@ -95,11 +95,11 @@ class AutoScroll {
     _loop = () => { };
     startAutoDrag() {
         this.stop();
-        if(this.hasTarget()) this._autoDragLoop();
+        if(this.hasTargets()) this._autoDragLoop();
     }
     startAutoScroll() {
         this.stop();
-        if(this.hasTarget()) this._autoScrollLoop();
+        if(this.hasTargets()) this._autoScrollLoop();
     }
     stop() {
         window.cancelAnimationFrame(this._loop);
@@ -144,6 +144,7 @@ class AutoScroll {
     constructor(autoScrollPlan) {
         this.plan = autoScrollPlan;
     }
+    init(){}
     //FUNCS
     isOutsideRestRadious() {
         const diffX = this._cursor.x - this._anchor.x;

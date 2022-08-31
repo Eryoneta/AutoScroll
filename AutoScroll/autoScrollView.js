@@ -9,27 +9,28 @@ class AutoScrollView {
 	//VARS
 	root;
 	//(ELEMENTS)
-	viewElement = document.createElement("div");				//USADO PARA O VISUAL
+	viewElement = document.createElement("div");	//USADO PARA O VISUAL
 	//(CURSOR)
-	_cursor = new Cursor(this);
-	_anchor = new Anchor(this);
-	cursorImageSize = this._cursor.cursorImageSize;
+	cursor = new Cursor(this);
+	anchor = new Anchor(this);
 	//MAIN
 	constructor(autoScrollRoot) {
 		this.root = autoScrollRoot;
 	}
 	init() {
 		this._appendAutoScrollToHTML(this.viewElement);
+		this.cursor.init();
+		this.anchor.init();
 	}
 	//FUNCS
 	//(CURSOR)
 	loadCursor(cursorMode = CursorMode.FIXED, following = false, anchorLocation = { x: 0, y: 0 }, cursorLocation = { x: 0, y: 0 }) {
-		setTimeout(() => this._anchor.show(this.viewElement, anchorLocation), 10);		//DELAY PARA APARECER APÓS O CURSOR
-		this._cursor.show(this.viewElement, following, cursorMode, anchorLocation, cursorLocation);
+		setTimeout(() => this.anchor.show(anchorLocation), 10);		//DELAY PARA APARECER APÓS O CURSOR
+		this.cursor.show(following, cursorMode, anchorLocation, cursorLocation);
 	}
 	unloadCursor() {
-		this._anchor.hide(this.viewElement);
-		setTimeout(() => this._cursor.hide(this.viewElement), 10);	//DELAY PARA DESAPARECER APÓS O FUNDO
+		this.anchor.hide();
+		setTimeout(() => this.cursor.hide(), 10);	//DELAY PARA DESAPARECER APÓS O FUNDO
 	}
 	//(INJEÇÃO)
 	_appendAutoScrollToHTML(viewElement) {
@@ -38,8 +39,8 @@ class AutoScrollView {
 	_createAutoScrollTag(viewElement) {
 		const autoScrollTag = document.createElement("auto-scroll");
 		const autoScrollTagShadow = autoScrollTag.attachShadow({ mode: "open" });
-		this._anchor.injectAnchorStyle(viewElement);
-		this._cursor.injectCursorStyle(viewElement);
+		this.anchor.injectAnchorStyle(viewElement);
+		this.cursor.injectCursorStyle(viewElement);
 		autoScrollTagShadow.appendChild(viewElement);
 		return autoScrollTag;
 	}

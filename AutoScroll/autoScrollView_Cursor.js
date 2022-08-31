@@ -2,7 +2,7 @@
 class Cursor {
 	//VARS
 	view;
-	cursorImageSize = this._image.size;
+	_element;
 	//(IMAGENS)
 	_image = {
 		basePath: "Scrolls",
@@ -57,6 +57,8 @@ class Cursor {
 		duration: "3s",
 		iterationCount: "infinite"
 	}
+	//IMAGE_SIZE
+	cursorImageSize = this._image.size;
 	//MAIN
 	constructor(autoScrollView) {
 		this.view = autoScrollView;
@@ -86,11 +88,13 @@ class Cursor {
 			{ time: 100.0, name: frames[0] }	//BLINK END
 		];
 	}
+	init() { }
 	//FUNCS
 	//(INJECT)
-	injectCursorStyle(viewElement) {
-		viewElement.style.setProperty("animation-duration", this._animation.duration);
-		viewElement.style.setProperty("animation-iteration-count", this._animation.iterationCount);
+	injectCursorStyle(element) {
+		this._element = element;
+		_element.style.setProperty("animation-duration", this._animation.duration);
+		_element.style.setProperty("animation-iteration-count", this._animation.iterationCount);
 		let keyframes = "";
 		for (let dir in this._image.direction) {
 			const direction = this._image.direction[dir];
@@ -109,12 +113,13 @@ class Cursor {
 				keyframes += "\n";
 			}
 		}
-		const styler = document.createElement("style");		//ANIMAÇÃO DE CURSOR É SEPARADA EM OUTRO <style>
+		const styler = document.create_element("style");		//ANIMAÇÃO DE CURSOR É SEPARADA EM OUTRO <style>
 		styler.innerHTML = keyframes;
-		viewElement.appendChild(styler);
+		_element.appendChild(styler);
 	}
 	//(SHOW/HIDE)
-	show(viewElement, mode = CursorMode.FREE, following = false, anchorLocation = { x: 0, y: 0 }, location = { x: 0, y: 0 }) {
+	show(mode = CursorMode.FREE, following = false, anchorLocation = { x: 0, y: 0 }, location = { x: 0, y: 0 }) {
+		if (!this._element) return;
 		const diffX = location.x - anchorLocation.x;
 		const diffY = location.y - anchorLocation.y;
 		const distance = Math.sqrt(diffX * diffX + diffY * diffY);
@@ -241,10 +246,11 @@ class Cursor {
 				}
 				break;
 		}
-		viewElement.style.setProperty("animation-name", imageNome + "_" + imageMode);
+		_element.style.setProperty("animation-name", imageNome + "_" + imageMode);
 	}
-	hide(viewElement) {
-		viewElement.style.removeProperty("animationName");
-		viewElement.style.removeProperty("cursor");
+	hide() {
+		if (!this._element) return;
+		_element.style.removeProperty("animationName");
+		_element.style.removeProperty("cursor");
 	}
 }

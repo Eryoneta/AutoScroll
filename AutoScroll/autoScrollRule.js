@@ -3,16 +3,17 @@ class AutoScrollRule {
     //VARS
     root;
     //(CONSTANTES)
-    speedIncremento = 0.125;				    //INCREMENTADOR DE VELOCIDADE
-    restRadius = 20;	                        //RAIO DA ÁREA EM QUE NÃO HÁ AUTOSCROLL
-    speedControl = 8;						    //DIVIDE A VELOCIDADE
-    autoScrollPesado = 5;					    //QUANTIDADE DE SCROLLS DADOS EM SCROLL PESADO
+    speedIncrement = 0.125;     //INCREMENTOR DE VELOCIDADE
+    restRadius = 20;            //RAIO DA ÁREA EM QUE NÃO HÁ AUTOSCROLL
+    speedControl = 8;           //DIVIDE A VELOCIDADE
+    lightAutoScroll = 1;        //QUANTIDADE DE UP/DOWN DADOS EM SCROLL LEVE
+    heavyAutoScroll = 5;        //QUANTIDADE DE UP/DOWN DADOS EM SCROLL PESADO
     //MAIN
     constructor(autoScrollRoot) {
         this.root = autoScrollRoot;
     }
     init() {
-        this.restRadius = (this.root.view.cursorImageSize / 2) + 5;
+        this.restRadius = (this.root.view.cursor.cursorImageSize / 2) + 5;
     }
     //FUNCS
     //(SCROLL_VALIDATION)

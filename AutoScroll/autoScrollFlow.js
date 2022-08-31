@@ -1,16 +1,3 @@
-//STATES
-const State = {
-	//STATE
-	INACTIVE: 0,							//NÃO ESTÁ NA TELA
-	HORIZONTAL_SCROLLING: 1,				//O MOUSE_WHEEL_ROLL MOVE O HORIZONTAL_SCROLL
-	DRAGGING: 2,							//MOUSE_DRAG MOVE OS SCROLLS
-	AUTO_DRAGGING: 3,						//MOUSE_MOVE MOVE OS SCROLLS
-	AUTO_SCROLLING: 4,						//OS SCROLLS SÃO MOVIDOS AUTOMATICAMENTE
-	DEFAULT_AUTOSCROLLING: 5,				//AUTOSCROLL PADRÃO
-	//STATE MODIFIERS
-	PAUSED: 10,								//ATIVO, MAS PARADO
-	WAITING: 20								//ESPERANDO INPUT
-}
 //AUTOSCROLL_FLOW
 class AutoScrollFlow {
 	//VARS
@@ -26,7 +13,7 @@ class AutoScrollFlow {
 	}
 	//FUNCS
 	//(SHORTCUTS)
-	_loadCursor(element, following) {
+	_loadCursor(element, following = false) {
 		const isInNeedOfScrollX = this.root.rule.isInNeedOfScrollX(element);
 		const isInNeedOfScrollY = this.root.rule.isInNeedOfScrollY(element);
 		const isInNeedOfBothScroll = (isInNeedOfScrollX && isInNeedOfScrollY);
@@ -42,43 +29,18 @@ class AutoScrollFlow {
 				break;
 		}
 	}
-	//(STATES)
-	setState(state) {
+	//(FLOW)
+	setState(state = State.INACTIVE) {
 		const node = this._states[state];
-		this.root.listeners.mousedown = node.mousedown;
-		this.root.listeners.mouseup = node.mouseup;
-		this.root.listeners.wheel = node.wheel;
-		this.root.listeners.mousemove = node.mousemove;
-		this.root.listeners.keydown = node.keydown;
-		this.root.listeners.keyup = node.keyup;
+		this.root.plan.listenerBundle.setListeners(node.listenerBundle);
 		node.statechange();		//EXECUTA NODE_CHANGE
 	}
-	_addState(state,
-		{
-			statechange = () => { },
-			mousedown = () => { },
-			mouseup = () => { },
-			wheel = () => { },
-			mousemove = () => { },
-			keydown = () => { },
-			keyup = () => { }
-		}
-	) {
-		const newNode = {
-			state: state,
-			statechange: statechange,
-			mousedown: mousedown,
-			mouseup: mouseup,
-			wheel: wheel,
-			mousemove: mousemove,
-			keydown: keydown,
-			keyup: keyup
-		}
-		this._states[newNode.state] = newNode;
+	_addState(node = new FlowNode()) {
+		this._states[node.state] = node;
 	}
 	_loadFlow() {
 		//[INACTIVE]
-		this._addState(State.INACTIVE, {
+		this._addState(new FlowNode(State.INACTIVE, {
 			statechange: () => {
 				this.root.plan.autoScroll.clear();	//RESETA TUDO
 			},
@@ -98,9 +60,9 @@ class AutoScrollFlow {
 						break;
 				}
 			}
-		});
+		}));
 		//[WAITING+INACTIVE]
-		this._addState(State.WAITING + State.INACTIVE, {
+		this._addState(new FlowNode(State.WAITING + State.INACTIVE, {
 			mouseup: (m) => {
 				switch (true) {
 					case MouseEvent.match(m, MouseEvent.MIDDLE):
@@ -116,9 +78,9 @@ class AutoScrollFlow {
 				this.root.plan.autoScroll.setCursor(m.clientX, m.clientY);
 				if (this.root.plan.autoScroll.isOutsideRestRadious()) this.setState(State.DRAGGING);
 			}
-		});
+		}));
 		//[AUTO_DRAGGING]
-		this._addState(State.AUTO_DRAGGING, {
+		this._addState(new FlowNode(State.AUTO_DRAGGING, {
 			statechange: () => {
 				this.root.plan.autoScroll.startAutoDrag();
 				this._loadCursor(this.root.plan.autoScroll.getRootTarget(), true);
@@ -127,9 +89,9 @@ class AutoScrollFlow {
 				this.root.plan.autoScroll.setCursor(m.clientX, m.clientY);
 				this._loadCursor(this.root.plan.autoScroll.getRootTarget(), true);
 			}
-		});
+		}));
 		//[DRAGGING]
-		this._addState(State.DRAGGING, {
+		this._addState(new FlowNode(State.DRAGGING, {
 			statechange: () => {
 				this.root.plan.autoScroll.startAutoDrag();
 				this._loadCursor(this.root.plan.autoScroll.getForegroundTarget(), true);
@@ -138,6 +100,6 @@ class AutoScrollFlow {
 				this.root.plan.autoScroll.setCursor(m.clientX, m.clientY);
 				this._loadCursor(this.root.plan.autoScroll.getForegroundTarget(), true);
 			}
-		});
+		}));
 	}
 }
