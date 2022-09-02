@@ -1,9 +1,3 @@
-//CURSOR_MODE
-const CursorMode = {
-	FREE: 0,
-	HORIZONTAL: 1,
-	VERTICAL: 2
-};
 //AUTOSCROLL_VIEW
 class AutoScrollView {
 	//VARS
@@ -22,9 +16,9 @@ class AutoScrollView {
 	}
 	//FUNCS
 	//(CURSOR)
-	loadCursor(cursorMode = CursorMode.FIXED, following = false, anchorLocation = { x: 0, y: 0 }, cursorLocation = { x: 0, y: 0 }) {
+	loadCursor(orientation = CursorOrientation.FIXED, mode = CursorMode.FOLLOWING, anchorLocation = { x: 0, y: 0 }, cursorLocation = { x: 0, y: 0 }) {
 		setTimeout(() => this.anchor.show(anchorLocation), 10);		//DELAY PARA APARECER APÓS O CURSOR
-		this.cursor.show(following, cursorMode, anchorLocation, cursorLocation);
+		this.cursor.show(orientation, mode, anchorLocation, cursorLocation);
 	}
 	unloadCursor() {
 		this.anchor.hide();

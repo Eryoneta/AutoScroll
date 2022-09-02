@@ -1,3 +1,14 @@
+//CURSOR_MODE
+const CursorOrientation = {
+	FREE: 0,
+	HORIZONTAL: 1,
+	VERTICAL: 2
+};
+//CURSOR_MODE
+const CursorMode = {
+	FOLLOWING: 0,
+	RESTING: 1
+};
 //CURSOR
 class Cursor {
 	//VARS
@@ -117,7 +128,7 @@ class Cursor {
 		_element.appendChild(styler);
 	}
 	//(SHOW/HIDE)
-	show(mode = CursorMode.FREE, following = false, anchorLocation = { x: 0, y: 0 }, location = { x: 0, y: 0 }) {
+	show(orientation = CursorOrientation.FREE, mode = CursorMode.FOLLOWING, anchorLocation = { x: 0, y: 0 }, location = { x: 0, y: 0 }) {
 		if (!this._element) return;
 		const diffX = location.x - anchorLocation.x;
 		const diffY = location.y - anchorLocation.y;
@@ -131,8 +142,8 @@ class Cursor {
 		const isResting = this._root.rule.isOutsideRestRadious(distance);	//DENTRO DA ÁREA DE REPOUSO
 		let imageNome = "";
 		let imageMode = "";
-		switch (mode) {
-			case CursorMode.FREE: default:
+		switch (orientation) {
+			case CursorOrientation.FREE: default:
 				const right = (angle > 0 && angle < 90 && angle > 270 && angle < 360);
 				const upRight = (angle > 0 && angle < 90);
 				const up = (angle > 0 && angle < 90);
@@ -148,64 +159,109 @@ class Cursor {
 						break;
 					case right:
 						imageNome = this._image.direction.right.name;					//RIGHT
-						if (following) {
-							imageMode = this._image.direction.right.modes.free.name;		//FREE
-						} else imageMode = this._image.direction.right.modes.fixed.name;	//FIXED
+						switch (mode) {
+							case CursorMode.FOLLOWING:
+								imageMode = this._image.direction.right.modes.free.name;		//FREE
+								break;
+							case CursorMode.RESTING:
+								imageMode = this._image.direction.right.modes.fixed.name;	//FIXED
+								break;
+						}
 						break;
 					case upRight:
 						imageNome = this._image.direction.upRight.name;					//UP-RIGHT
-						if (following) {
-							imageMode = this._image.direction.upRight.modes.free.name;		//FREE
-						} else imageMode = this._image.direction.upRight.modes.fixed.name;	//FIXED
+						switch (mode) {
+							case CursorMode.FOLLOWING:
+								imageMode = this._image.direction.upRight.modes.free.name;		//FREE
+								break;
+							case CursorMode.RESTING:
+								imageMode = this._image.direction.upRight.modes.fixed.name;	//FIXED
+								break;
+						}
 						break;
 					case up:
 						imageNome = this._image.direction.up.name;						//UP
-						if (following) {
-							imageMode = this._image.direction.up.modes.free.name;			//FREE
-						} else imageMode = this._image.direction.up.modes.fixed.name;		//FIXED
+						switch (mode) {
+							case CursorMode.FOLLOWING:
+								imageMode = this._image.direction.up.modes.free.name;			//FREE
+								break;
+							case CursorMode.RESTING:
+								imageMode = this._image.direction.up.modes.fixed.name;		//FIXED
+								break;
+						}
 						break;
 					case upLeft:
 						imageNome = this._image.direction.upLeft.name;					//UP-LEFT
-						if (following) {
-							imageMode = this._image.direction.upLeft.modes.free.name;		//FREE
-						} else imageMode = this._image.direction.upLeft.modes.fixed.name;	//FIXED
+						switch (mode) {
+							case CursorMode.FOLLOWING:
+								imageMode = this._image.direction.upLeft.modes.free.name;		//FREE
+								break;
+							case CursorMode.RESTING:
+								imageMode = this._image.direction.upLeft.modes.fixed.name;	//FIXED
+								break;
+						}
 						break;
 					case left:
 						imageNome = this._image.direction.left.name;					//UP-RIGHT
-						if (following) {
-							imageMode = this._image.direction.left.modes.free.name;			//FREE
-						} else imageMode = this._image.direction.left.modes.fixed.name;		//FIXED
+						switch (mode) {
+							case CursorMode.FOLLOWING:
+								imageMode = this._image.direction.left.modes.free.name;			//FREE
+								break;
+							case CursorMode.RESTING:
+								imageMode = this._image.direction.left.modes.fixed.name;		//FIXED
+								break;
+						}
 						break;
 					case downLeft:
 						imageNome = this._image.direction.downLeft.name;				//DOWN-LEFT
-						if (following) {
-							imageMode = this._image.direction.downLeft.modes.free.name;		//FREE
-						} else imageMode = this._image.direction.downLeft.modes.fixed.name;	//FIXED
+						switch (mode) {
+							case CursorMode.FOLLOWING:
+								imageMode = this._image.direction.downLeft.modes.free.name;		//FREE
+								break;
+							case CursorMode.RESTING:
+								imageMode = this._image.direction.downLeft.modes.fixed.name;	//FIXED
+								break;
+						}
 						break;
 					case down:
 						imageNome = this._image.direction.down.name;					//DOWN
-						if (following) {
-							imageMode = this._image.direction.down.modes.free.name;			//FREE
-						} else imageMode = this._image.direction.down.modes.fixed.name;		//FIXED
+						switch (mode) {
+							case CursorMode.FOLLOWING:
+								imageMode = this._image.direction.down.modes.free.name;			//FREE
+								break;
+							case CursorMode.RESTING:
+								imageMode = this._image.direction.down.modes.fixed.name;		//FIXED
+								break;
+						}
 						break;
 					case downRight:
 						imageNome = this._image.direction.downRight.name;				//DOWN-RIGHT
-						if (following) {
-							imageMode = this._image.direction.downRight.modes.free.name;	//FREE
-						} else imageMode = this._image.direction.downRight.modes.fixed.name;//FIXED
+						switch (mode) {
+							case CursorMode.FOLLOWING:
+								imageMode = this._image.direction.downRight.modes.free.name;	//FREE
+								break;
+							case CursorMode.RESTING:
+								imageMode = this._image.direction.downRight.modes.fixed.name;//FIXED
+								break;
+						}
 						break;
 				}
 				break;
-			case CursorMode.HORIZONTAL:
+			case CursorOrientation.HORIZONTAL:
 				const pointingRight = (angle > 0 && angle < 90 && angle > 270 && angle < 360);
 				const horizontalCenter = (angle === 90 || angle === 270);
 				const pointingLeft = (angle > 90 && angle < 270);
 				switch (true) {
 					case pointingRight:
 						imageNome = this._image.direction.right.name;					//RIGHT
-						if (following) {
-							imageMode = this._image.direction.right.modes.free.name;		//FREE
-						} else imageMode = this._image.direction.right.modes.fixed.name;	//FIXED
+						switch (mode) {
+							case CursorMode.FOLLOWING:
+								imageMode = this._image.direction.right.modes.free.name;		//FREE
+								break;
+							case CursorMode.RESTING:
+								imageMode = this._image.direction.right.modes.fixed.name;	//FIXED
+								break;
+						}
 						break;
 					case isResting:
 					case horizontalCenter:
@@ -214,22 +270,32 @@ class Cursor {
 						break;
 					case pointingLeft:
 						imageNome = this._image.direction.left.name;					//LEFT
-						if (following) {
-							imageMode = this._image.direction.left.modes.free.name;			//FREE
-						} else imageMode = this._image.direction.left.modes.fixed.name;		//FIXED
+						switch (mode) {
+							case CursorMode.FOLLOWING:
+								imageMode = this._image.direction.left.modes.free.name;			//FREE
+								break;
+							case CursorMode.RESTING:
+								imageMode = this._image.direction.left.modes.fixed.name;		//FIXED
+								break;
+						}
 						break;
 				}
 				break;
-			case CursorMode.VERTICAL:
+			case CursorOrientation.VERTICAL:
 				const pointingUp = (angle > 0 && angle < 180);
 				const verticalCenter = (angle === 0 || angle === 180);
 				const pointingDown = (angle > 0 && angle < 180);
 				switch (true) {
 					case pointingUp:
 						imageNome = this._image.direction.up.name;						//UP
-						if (following) {
-							imageMode = this._image.direction.up.modes.free.name;			//FREE
-						} else imageMode = this._image.direction.up.modes.fixed.name;		//FIXED
+						switch (mode) {
+							case CursorMode.FOLLOWING:
+								imageMode = this._image.direction.up.modes.free.name;			//FREE
+								break;
+							case CursorMode.RESTING:
+								imageMode = this._image.direction.up.modes.fixed.name;		//FIXED
+								break;
+						}
 						break;
 					case isResting:
 					case verticalCenter:
@@ -238,9 +304,14 @@ class Cursor {
 						break;
 					case pointingDown:
 						imageNome = this._image.direction.down.name;					//DOWN
-						if (following) {
-							imageMode = this._image.direction.down.modes.free.name;			//FREE
-						} else imageMode = this._image.direction.down.modes.fixed.name;		//FIXED
+						switch (mode) {
+							case CursorMode.FOLLOWING:
+								imageMode = this._image.direction.down.modes.free.name;			//FREE
+								break;
+							case CursorMode.RESTING:
+								imageMode = this._image.direction.down.modes.fixed.name;		//FIXED
+								break;
+						}
 						break;
 				}
 				break;

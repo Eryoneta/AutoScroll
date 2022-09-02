@@ -13,19 +13,19 @@ class AutoScrollFlow {
 	}
 	//FUNCS
 	//(SHORTCUTS)
-	_loadCursor(element, following = false) {
+	_loadCursor(element, mode = CursorMode.FOLLOWING) {
 		const isInNeedOfScrollX = this.root.rule.isInNeedOfScrollX(element);
 		const isInNeedOfScrollY = this.root.rule.isInNeedOfScrollY(element);
-		const isInNeedOfBothScroll = (isInNeedOfScrollX && isInNeedOfScrollY);
+		const isInNeedOfBothScrolls = (isInNeedOfScrollX && isInNeedOfScrollY);
 		switch (true) {
-			case isInNeedOfBothScroll:
-				this.root.plan.loadCursor(CursorMode.FREE, following, this.root.plan.autoScroll.getAnchor(), this.root.plan.autoScroll.getCursor());
+			case isInNeedOfBothScrolls:
+				this.root.view.loadCursor(CursorOrientation.FREE, mode, this.root.plan.autoScroll.getAnchor(), this.root.plan.autoScroll.getCursor());
 				break;
 			case isInNeedOfScrollX:
-				this.root.plan.loadCursor(CursorMode.HORIZONTAL, following, this.root.plan.autoScroll.getAnchor(), this.root.plan.autoScroll.getCursor());
+				this.root.view.loadCursor(CursorOrientation.HORIZONTAL, mode, this.root.plan.autoScroll.getAnchor(), this.root.plan.autoScroll.getCursor());
 				break;
 			case isInNeedOfScrollY:
-				this.root.plan.loadCursor(CursorMode.VERTICAL, following, this.root.plan.autoScroll.getAnchor(), this.root.plan.autoScroll.getCursor());
+				this.root.view.loadCursor(CursorOrientation.VERTICAL, mode, this.root.plan.autoScroll.getAnchor(), this.root.plan.autoScroll.getCursor());
 				break;
 		}
 	}
@@ -83,22 +83,22 @@ class AutoScrollFlow {
 		this._addState(new FlowNode(State.AUTO_DRAGGING, {
 			stateload: () => {
 				this.root.plan.autoScroll.startAutoDrag();
-				this._loadCursor(this.root.plan.autoScroll.getRootTarget(), true);
+				this._loadCursor(this.root.plan.autoScroll.getRootTarget(), CursorMode.FOLLOWING);
 			},
 			mousemove: (m) => {
 				this.root.plan.autoScroll.setCursor(m.clientX, m.clientY);
-				this._loadCursor(this.root.plan.autoScroll.getRootTarget(), true);
+				this._loadCursor(this.root.plan.autoScroll.getRootTarget(), CursorMode.FOLLOWING);
 			}
 		}));
 		//[DRAGGING]
 		this._addState(new FlowNode(State.DRAGGING, {
 			stateload: () => {
 				this.root.plan.autoScroll.startAutoDrag();
-				this._loadCursor(this.root.plan.autoScroll.getForegroundTarget(), true);
+				this._loadCursor(this.root.plan.autoScroll.getForegroundTarget(), CursorMode.FOLLOWING);
 			},
 			mousemove: (m) => {
 				this.root.plan.autoScroll.setCursor(m.clientX, m.clientY);
-				this._loadCursor(this.root.plan.autoScroll.getForegroundTarget(), true);
+				this._loadCursor(this.root.plan.autoScroll.getForegroundTarget(), CursorMode.FOLLOWING);
 			}
 		}));
 	}
