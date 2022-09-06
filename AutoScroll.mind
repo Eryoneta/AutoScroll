@@ -67,7 +67,7 @@
 </text>	</mod>	<mod border="0" color="33CCFF" icons="" title="0_click" x="111" y="16">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="1_click" x="111" y="19">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="2_click" x="111" y="22">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="3_click" x="111" y="25">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="downArrow_click" x="133" y="48">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="ctrlIsDown() &amp;&#10;downArrow_click" x="133" y="51">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="4_click" x="111" y="28">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="5_click" x="111" y="31">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="ctrlIsDown() &amp;&#10;upArrow_click" x="133" y="39">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="upArrow_click" x="133" y="36">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="rightArrow_click" x="145" y="42">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="6_click" x="111" y="34">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="7_click" x="111" y="37">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="ctrlIsDown() &amp;&#10;rightArrow_click" x="145" y="45">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="8_click" x="111" y="40">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="leftArrow_click" x="120" y="42">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="ctrlIsDown() &amp;&#10;leftArrow_click" x="120" y="45">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="9_click" x="111" y="43">		<text/>	</mod>	<mod border="0" color="0099CC" icons="" title="keyboard" x="135" y="32">		<text/>	</mod>	<mod border="0" color="0099CC" icons="" title="mouse" x="165" y="61">		<text/>	</mod>	<mod border="0" color="0099CC" icons="" title="keyboard" x="147" y="61">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="left_down&#10;| middle_down&#10;| right_down" x="254" y="77">		<text>+ left\_down | middle\_down | right\_down:&#13;
 :[{&#13;
 	autoScroll.stop();&#13;
-	_loadCursor(autoScroll.getForegroundTarget(),false);&#13;
+	_loadCursor(autoScroll.getForegroundTarget(),RESTING);&#13;
 	setState(WAITING+AUTO_DRAGGING);&#13;
 }]{###`:`}&#13;
 </text>	</mod>	<mod border="0" color="33CCFF" icons="" title="[any]_down" x="171" y="61">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="[any]_down" x="138" y="61">		<text/>	</mod>	<mod border="0" color="0099CC" icons="" title="mouse" x="279" y="84">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="left_up |&#10;middle_up" x="285" y="82">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="right_up" x="285" y="86">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="wheel_move" x="276" y="88">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="cursorIsOutOfArea() &amp;&#10;right_up" x="285" y="89">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="space_click" x="218" y="100">		<text/>	</mod>	<mod border="0" color="0099CC" icons="" title="keyboard" x="227" y="100">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="middle_down" x="251" y="102">		<text/>	</mod>	<mod border="0" color="0099CC" icons="" title="mouse" x="245" y="100">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="left_down |&#10;right_down" x="251" y="98">		<text/>	</mod>	<mod border="0" color="0099CC" icons="" title="mouse" x="272" y="105">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="right_up" x="278" y="107">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="wheel_move" x="270" y="110">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="left_up" x="278" y="104">		<text/>	</mod>	<mod border="0" color="0099CC" icons="" title="mouse" x="167" y="106">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="middle_down" x="173" y="108">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="left_down |&#10;right_down" x="173" y="104">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="space_click" x="140" y="106">		<text/>	</mod>	<mod border="0" color="0099CC" icons="" title="keyboard" x="149" y="106">		<text/>	</mod>	<mod border="0" color="0099CC" icons="" title="mouse" x="197" y="111">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="wheel_move" x="194" y="115">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="left_up" x="203" y="110">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="right_up" x="203" y="113">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="space_click" x="140" y="128">		<text/>	</mod>	<mod border="0" color="0099CC" icons="" title="keyboard" x="149" y="128">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="left_down |&#10;right_down" x="173" y="126">		<text/>	</mod>	<mod border="0" color="0099CC" icons="" title="mouse" x="167" y="128">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="middle_down" x="173" y="130">		<text/>	</mod>	<mod border="0" color="0099CC" icons="" title="mouse" x="199" y="132">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="left_up" x="205" y="131">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="right_up" x="205" y="134">		<text/>	</mod>	<mod border="0" color="33CCFF" icons="" title="wheel_move" x="197" y="137">		<text/>	</mod>	<mod border="0" color="FFFF00" icons="" title="Funcionalidades" x="64" y="-121">		<text>* Funcionalidades:&#13;
@@ -90,12 +90,12 @@
 </text>	</mod>	<mod border="0" color="0099CC" icons="" title="wheel_move" x="163" y="87">		<text/>	</mod>	<mod border="3" color="33CCFF" icons="" title="move" x="248" y="81">		<text>+ move:&#13;
 :[{&#13;
 	autoScroll.setCursor(m.x,m.y);&#13;
-	_loadCursor(autoScroll.getForegroundTarget(),true);&#13;
+	_loadCursor(autoScroll.getForegroundTarget(),FOLLOWING);&#13;
 }]{###`:`}&#13;
 </text>	</mod>	<mod border="3" color="33CCFF" icons="" title="move" x="224" y="63">		<text>+ move:&#13;
 :[{&#13;
 	autoScroll.setCursor(m.x,m.y);&#13;
-	_loadCursor(autoScroll.getForegroundTarget(),true);&#13;
+	_loadCursor(autoScroll.getForegroundTarget(),FOLLOWING);&#13;
 }]{###`:`}&#13;
 </text>	</mod>	<mod border="0" color="0099CC" icons="" title="cursorIsOutOfArea() &amp;&#10;move" x="240" y="105">		<text/>	</mod>	<mod border="0" color="FFFF00" icons="" title="Sistema" x="53" y="-116">		<text>+ Sistema:&#13;
 </text>	</mod>	<mod border="0" color="FFFFFF" icons="/Basics/Empty.png" title="manifest.json" x="24" y="-91">		<text>+ manifest.json:&#13;
@@ -290,14 +290,14 @@
 </text>	</mod>	<mod border="3" color="33CCFF" icons="" title="state_load" x="215" y="63">		<text>+ state_load:&#13;
 :[{&#13;
 	autoScroll.startAutoDrag();&#13;
-	_loadCursor(autoScroll.getForegroundTarget(),true);&#13;
+	_loadCursor(autoScroll.getForegroundTarget(),FOLLOWING);&#13;
 }]{###`:`}&#13;
 </text>	</mod>	<mod border="0" color="646464" icons="" title="_loadCursor(element,mode)" x="185" y="23">		<text>+ _loadCursor(element,mode):&#13;
 - Chama `loadCursor(...)` de acordo com o ´element´: Se precisa de scroll horizontal, vertical , ou ambos.&#13;
 </text>	</mod>	<mod border="3" color="33CCFF" icons="" title="state_change" x="238" y="81">		<text>+ state_change:&#13;
 :[{&#13;
 	autoScroll.startAutoDrag();&#13;
-	_loadCursor(autoScroll.getForegroundTarget(),true);&#13;
+	_loadCursor(autoScroll.getForegroundTarget(),FOLLOWING);&#13;
 }]{###`:`}&#13;
 </text>	</mod>	<mod border="0" color="00C817" icons="" title="CursorMode" x="-62" y="-69">		<text>+ CursorMode:&#13;
 - Define o comportamento visual do cursor, se reaje a posição a qual aponta ou não.&#13;
