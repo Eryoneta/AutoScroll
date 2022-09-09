@@ -72,9 +72,9 @@ class AutoScroll {
         deltaX: 0,
         deltaY: 0
     }
-    setAutoScroll(x, y) {
-        this._autoScroll.deltaX = x;
-        this._autoScroll.deltaY = y;
+    setAutoScroll(deltaX, deltaY) {
+        this._autoScroll.deltaX = deltaX;
+        this._autoScroll.deltaY = deltaY;
     }
     getAutoScroll() {
         return _autoScroll;
@@ -84,9 +84,9 @@ class AutoScroll {
         deltaX: 0,
         deltaY: 0
     }
-    setScroll(x, y) {
-        this._scroll.deltaX = x;
-        this._scroll.deltaY = y;
+    setScroll(deltaX, deltaY) {
+        this._scroll.deltaX = deltaX;
+        this._scroll.deltaY = deltaY;
     }
     getScroll() {
         return _scroll;
