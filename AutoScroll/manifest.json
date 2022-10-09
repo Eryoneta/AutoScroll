@@ -1,18 +1,18 @@
 {
 	"manifest_version": 3,
 	"name": "AutoScroll",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"author": "Yo",
 	"description": "Customizes and adds useful functions to the autoscroll.",
 	"icons": {
-		"16": "Icons/Icone16.png",
-		"32": "Icons/Icone32.png",
-		"48": "Icons/Icone48.png",
-		"128": "Icons/Icone128.png"
+		"16": "icons/icon16.png",
+		"32": "icons/icon32.png",
+		"48": "icons/icon48.png",
+		"128": "icons/icon128.png"
 	},
 	"action": {
 		"default_icon": {
-			"32": "Icons/Icone32.png"
+			"32": "icons/icon32.png"
 		}
 	},
 	"background": {
@@ -24,14 +24,14 @@
 				"<all_urls>"
 			],
 			"js": [
-				"autoScrollRoot.js",
-				"autoScrollRule.js",
-				"autoScrollFlow.js",
-				"autoScrollView.js",
-				"autoScrollView_Cursor.js",
-				"autoScrollView_Anchor.js",
-				"autoScrollPlan.js",
-				"autoScrollPlan_AutoScroll.js",
+				"autoScroll/autoScrollRoot.js",
+				"autoScroll/autoScrollRule.js",
+				"autoScroll/autoScrollFlow.js",
+				"autoScroll/autoScrollView.js",
+				"autoScroll/autoScrollView_Cursor.js",
+				"autoScroll/autoScrollView_Anchor.js",
+				"autoScroll/autoScrollPlan.js",
+				"autoScroll/autoScrollPlan_AutoScroll.js",
 				"injection.js"
 			],
 			"all_frames": false,
@@ -41,7 +41,7 @@
 	"web_accessible_resources": [
 		{
 			"resources": [
-				"Scrolls/*.png"
+				"scrolls/*.png"
 			],
 			"matches": [
 				"<all_urls>"

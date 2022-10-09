@@ -108,6 +108,8 @@ class AutoScroll {
         let deltaX = 0;
         let deltaY = 0;
         if (this.isOutsideRestRadious()) {
+            const diffX = this._cursor.x - this._anchor.x;
+            const diffY = this._cursor.y - this._anchor.y;
             deltaX = diffX / this.plan.root.rule.speedControl;
             deltaY = diffY / this.plan.root.rule.speedControl;
         }
@@ -144,7 +146,6 @@ class AutoScroll {
     constructor(autoScrollPlan) {
         this.plan = autoScrollPlan;
     }
-    init(){}
     //FUNCS
     isOutsideRestRadious() {
         const diffX = this._cursor.x - this._anchor.x;
