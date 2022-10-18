@@ -29,7 +29,7 @@ class ListenerBundle {
     mousemove = () => { };
     keydown = () => { };
     keyup = () => { };
-    setListeners(listenerBundle = ListenerBundle()) {
+    setListeners(listenerBundle = new ListenerBundle()) {
         this.mousedown = listenerBundle.mousedown;
         this.mouseup = listenerBundle.mouseup;
         this.wheel = listenerBundle.wheel;
@@ -45,7 +45,7 @@ class ListenerBundle {
         mousemove = () => { },
         keydown = () => { },
         keyup = () => { }
-    }) {
+    } = {}) {
         this.mousedown = mousedown;
         this.mouseup = mouseup;
         this.wheel = wheel;
@@ -54,12 +54,12 @@ class ListenerBundle {
         this.keyup = keyup;
     }
     //FUNCS
-    bindListeners() {
-        document.addEventListener("mousedown", (m) => this.mousedown(m), true);
-        document.addEventListener("mouseup", (m) => this.mouseup(m), true);
-        document.addEventListener("wheel", (m) => this.wheel(m), true);
-        document.addEventListener("mousemove", (m) => this.mousemove(m), true);
-        document.addEventListener("keydown", (m) => this.keydown(m), true);
-        document.addEventListener("keyup", (m) => this.keyup(m), true);
+    bindListeners(element) {
+        element.addEventListener("mousedown", (m) => this.mousedown(m), true);
+        element.addEventListener("mouseup", (m) => this.mouseup(m), true);
+        element.addEventListener("wheel", (m) => this.wheel(m), true);
+        element.addEventListener("mousemove", (m) => this.mousemove(m), true);
+        element.addEventListener("keydown", (m) => this.keydown(m), true);
+        element.addEventListener("keyup", (m) => this.keyup(m), true);
     }
 }

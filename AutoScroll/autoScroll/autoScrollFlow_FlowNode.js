@@ -26,7 +26,7 @@ class FlowNode {
 		mousemove = () => { },
 		keydown = () => { },
 		keyup = () => { }
-	}) {
+	} = {}) {
 		this.state = state;
 		this.stateload = stateload;
 		this.listeners.mousedown = mousedown;

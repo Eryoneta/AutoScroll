@@ -103,8 +103,8 @@ class Cursor {
 	//(INJECT)
 	injectCursor(element) {
 		this._element = element;
-		_element.style.setProperty("animation-duration", this._animation.duration);
-		_element.style.setProperty("animation-iteration-count", this._animation.iterationCount);
+		this._element.style.setProperty("animation-duration", this._animation.duration);
+		this._element.style.setProperty("animation-iteration-count", this._animation.iterationCount);
 		let keyframes = "";
 		for (let dir in this._image.direction) {
 			const direction = this._image.direction[dir];
@@ -123,9 +123,9 @@ class Cursor {
 				keyframes += "\n";
 			}
 		}
-		const styler = document.create_element("style");		//ANIMAÇÃO DE CURSOR É SEPARADA EM OUTRO <style>
+		const styler = document.createElement("style");		//ANIMAÇÃO DE CURSOR É SEPARADA EM OUTRO <style>
 		styler.innerHTML = keyframes;
-		_element.appendChild(styler);
+		this._element.appendChild(styler);
 	}
 	//(SHOW/HIDE)
 	show(orientation = CursorOrientation.FREE, mode = CursorMode.FOLLOWING, anchorLocation = { x: 0, y: 0 }, location = { x: 0, y: 0 }) {
@@ -316,11 +316,11 @@ class Cursor {
 				}
 				break;
 		}
-		_element.style.setProperty("animation-name", imageNome + "_" + imageMode);
+		this._element.style.setProperty("animation-name", imageNome + "_" + imageMode);
 	}
 	hide() {
 		if (!this._element) return;
-		_element.style.removeProperty("animationName");
-		_element.style.removeProperty("cursor");
+		this._element.style.removeProperty("animationName");
+		this._element.style.removeProperty("cursor");
 	}
 }

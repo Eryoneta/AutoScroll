@@ -27,11 +27,13 @@
 				"autoScroll/autoScrollRoot.js",
 				"autoScroll/autoScrollRule.js",
 				"autoScroll/autoScrollFlow.js",
+				"autoScroll/autoScrollFlow_FlowNode.js",
 				"autoScroll/autoScrollView.js",
 				"autoScroll/autoScrollView_Cursor.js",
 				"autoScroll/autoScrollView_Anchor.js",
 				"autoScroll/autoScrollPlan.js",
 				"autoScroll/autoScrollPlan_AutoScroll.js",
+				"autoScroll/autoScrollPlan_ListenerBundle.js",
 				"injection.js"
 			],
 			"all_frames": false,

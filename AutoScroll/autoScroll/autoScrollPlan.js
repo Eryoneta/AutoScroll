@@ -3,7 +3,7 @@ class AutoScrollPlan {
     //VARS
     root;
     //(AUTOSCROLL)
-    autoScroll = AutoScroll();
+    autoScroll = new AutoScroll();
     //(LISTENERS)
     listenerBundle = new ListenerBundle();
     //MAIN
@@ -11,8 +11,7 @@ class AutoScrollPlan {
         this.root = autoScrollRoot;
     }
     init() {
-        this.listenerBundle.bindListeners();
-        this.autoScroll.init();
+        this.listenerBundle.bindListeners(document);
     }
     //FUNCS
     //(EVENTS)
