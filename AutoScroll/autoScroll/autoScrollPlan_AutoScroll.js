@@ -1,3 +1,11 @@
+//AUTOSCROLL_PATCH
+var autoScroll_Patch;
+function _autoDragLoop_Patch() {
+    autoScroll_Patch._autoDragLoop();
+}
+function _autoScrollLoop_Patch() {
+    autoScroll_Patch._autoScrollLoop();
+}
 //AUTOSCROLL
 class AutoScroll {
     //VARS
@@ -14,15 +22,15 @@ class AutoScroll {
     }
     _getElementWithScroll(element) {
         if (this.plan.root.rule.isElementWindow(element)) return null;
-        if (!this.root.rule.isElementValid(element)) return this._getElementWithScroll(element.parentNode);
+        if (!this.plan.root.rule.isElementValid(element)) return this._getElementWithScroll(element.parentNode);
         if (this.plan.root.rule.isElementABase(element)) return element;
         if (!this.plan.root.rule.scrollHasToBeAllowed(element)) return this._getElementWithScroll(element.parentNode);
         if (!this.plan.root.rule.isInNeedOfScroll(element)) return this._getElementWithScroll(element.parentNode);
         return element;
     }
-    _getRootElementWithScroll() {
+    _getRootElementWithScroll(element) {
         if (this.plan.root.rule.isElementWindow(element)) return null;
-        if (!this.root.rule.isElementValid(element)) return this._getElementWithScroll(element.parentNode);
+        if (!this.plan.root.rule.isElementValid(element)) return this._getElementWithScroll(element.parentNode);
         if (this.plan.root.rule.isElementABase(element)) return element;
         if (!this.plan.root.rule.scrollHasToBeAllowed(element)) return this._getRootElementWithScroll(element.parentNode);
         if (!this.plan.root.rule.isInNeedOfScroll(element)) return this._getRootElementWithScroll(element.parentNode);
@@ -53,7 +61,7 @@ class AutoScroll {
         this._anchor.y = y;
     }
     getAnchor() {
-        return _anchor;
+        return this._anchor;
     }
     //(CURSOR)
     _cursor = {
@@ -65,7 +73,7 @@ class AutoScroll {
         this._cursor.y = y;
     }
     getCursor() {
-        return _cursor;
+        return this._cursor;
     }
     //(DIRECTION TO AUTOSCROLL)
     _autoScroll = {
@@ -77,7 +85,7 @@ class AutoScroll {
         this._autoScroll.deltaY = y;
     }
     getAutoScroll() {
-        return _autoScroll;
+        return this._autoScroll;
     }
     //(SCROLL DURING ANIMATION)
     _scroll = {
@@ -89,17 +97,17 @@ class AutoScroll {
         this._scroll.deltaY = y;
     }
     getScroll() {
-        return _scroll;
+        return this._scroll;
     }
     //(ANIMATION)
     _loop = () => { };
     startAutoDrag() {
         this.stop();
-        if(this.hasTargets()) this._autoDragLoop();
+        if (this.hasTargets()) this._autoDragLoop();
     }
     startAutoScroll() {
         this.stop();
-        if(this.hasTargets()) this._autoScrollLoop();
+        if (this.hasTargets()) this._autoScrollLoop();
     }
     stop() {
         window.cancelAnimationFrame(this._loop);
@@ -114,23 +122,23 @@ class AutoScroll {
             deltaY = diffY / this.plan.root.rule.speedControl;
         }
         this._loopEngine(this._foreTarget, deltaX, deltaY);
-        this._loop = window.requestAnimationFrame(this._autoDragLoop);
+        this._loop = window.requestAnimationFrame(_autoDragLoop_Patch);
     }
     _autoScrollLoop() {
         this._loopEngine(this._rootTarget, this._autoScroll.deltaX, this._autoScroll.deltaY);
-        this._loop = window.requestAnimationFrame(this._autoScrollLoop);
+        this._loop = window.requestAnimationFrame(_autoScrollLoop_Patch);
     }
     _loopEngine(element, deltaX, deltaY) {
-        const isWindow = !this.plan.root.rule.isElementWindow(element);
+        const isWindow = this.plan.root.rule.isElementWindow(element);
         let scrollX = (isWindow ? element.scrollX : element.scrollLeft);
         let scrollY = (isWindow ? element.scrollY : element.scrollTop);
         //AUTOSCROLL/AUTODRAG
         scrollX += deltaX;
         scrollY += deltaY;
         //APLICA SCROLL DURANTE LOOP
-        scrollX += this._scroll.xValue;
-        scrollY += this._scroll.yValue;
-        this._scroll.setScroll(0, 0);
+        scrollX += this._scroll.deltaX;
+        scrollY += this._scroll.deltaY;
+        this.setScroll(0, 0);
         //LIMITA SCROLL NA TELA
         const scrollWidth = element.scrollWidth - element.clientWidth;
         const scrollHeight = element.scrollHeight - element.clientHeight;
@@ -138,13 +146,17 @@ class AutoScroll {
         scrollY = Math.max(0, Math.min(scrollY, scrollHeight));     //TODO: CHECAR SE REALMENTE O LIMITA
         //MOVE SCROLL
         if (!isWindow) {
-            element.scrollLeft = scrollX;
-            element.scrollTop = scrollY;
+            // element.scrollLeft = scrollX;
+            // element.scrollTop = scrollY;
+
+            window.scrollTo(scrollX, scrollY);
+
         } else window.scroll(scrollX, scrollY);
     }
     //MAIN
     constructor(autoScrollPlan) {
         this.plan = autoScrollPlan;
+        autoScroll_Patch = this;
     }
     //FUNCS
     isOutsideRestRadious() {

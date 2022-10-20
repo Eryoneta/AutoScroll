@@ -5,7 +5,7 @@ class Anchor {
 	_element;
 	//(IMAGENS)
 	_image = {
-		basePath: "Scrolls",
+		basePath: "scrolls",
 		anchor: {
 			name: "F"	//EX: "Scrolls/F.png"
 		},
@@ -32,7 +32,7 @@ class Anchor {
 	//(SHOW/HIDE)
 	show(location = { x: 0, y: 0 }) {
 		if (!this._element) return;
-		const cursorPath = this._image.basePath + "/" + this._image.anchor.name + this._image.fileType;
+		const cursorPath = this._image.basePath + "/" + this._image.anchor.name + "." + this._image.fileType;
 		this._element.style.setProperty("background-image", "url('" + chrome.runtime.getURL(cursorPath) + "')");
 		this._element.style.setProperty("background-position", location.x + "px " + location.y + "px");
 		this._element.style.removeProperty("display");

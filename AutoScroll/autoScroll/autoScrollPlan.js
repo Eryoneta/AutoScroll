@@ -3,7 +3,7 @@ class AutoScrollPlan {
     //VARS
     root;
     //(AUTOSCROLL)
-    autoScroll = new AutoScroll();
+    autoScroll = new AutoScroll(this);
     //(LISTENERS)
     listenerBundle = new ListenerBundle();
     //MAIN

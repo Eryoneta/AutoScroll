@@ -16,7 +16,7 @@ class FlowNode {
 	//VARS
 	state = State.INACTIVE;
 	stateload = () => { };
-	listeners = new ListenerBundle();
+	listenerBundle = new ListenerBundle();
 	//MAIN
 	constructor(state, {
 		stateload = () => { },
@@ -29,11 +29,11 @@ class FlowNode {
 	} = {}) {
 		this.state = state;
 		this.stateload = stateload;
-		this.listeners.mousedown = mousedown;
-		this.listeners.mouseup = mouseup;
-		this.listeners.wheel = wheel;
-		this.listeners.mousemove = mousemove;
-		this.listeners.keydown = keydown;
-		this.listeners.keyup = keyup;
+		this.listenerBundle.mousedown = mousedown;
+		this.listenerBundle.mouseup = mouseup;
+		this.listenerBundle.wheel = wheel;
+		this.listenerBundle.mousemove = mousemove;
+		this.listenerBundle.keydown = keydown;
+		this.listenerBundle.keyup = keyup;
 	}
 }

@@ -16,10 +16,7 @@ class Cursor {
 	_element;
 	//(IMAGENS)
 	_image = {
-		basePath: "Scrolls",
-		anchor: {
-			name: "F"	//EX: "Scrolls/F.png"
-		},
+		basePath: "scrolls",
 		direction: {
 			center: {
 				name: "M",
@@ -139,7 +136,7 @@ class Cursor {
 			180	o  0
 			   270
 		*/
-		const isResting = this._root.rule.isOutsideRestRadious(distance);	//DENTRO DA ÁREA DE REPOUSO
+		const isResting = this.view.root.rule.isOutsideRestRadious(distance);	//DENTRO DA ÁREA DE REPOUSO
 		let imageNome = "";
 		let imageMode = "";
 		switch (orientation) {
