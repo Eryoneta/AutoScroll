@@ -57,9 +57,9 @@ class ListenerBundle {
     bindListeners(element) {
         element.addEventListener("mousedown", (m) => this.mousedown(m), true);
         element.addEventListener("mouseup", (m) => this.mouseup(m), true);
-        element.addEventListener("wheel", (m) => this.wheel(m), true);
+        element.addEventListener("wheel", (w) => this.wheel(w), { passive: false });
         element.addEventListener("mousemove", (m) => this.mousemove(m), true);
-        element.addEventListener("keydown", (m) => this.keydown(m), true);
-        element.addEventListener("keyup", (m) => this.keyup(m), true);
+        element.addEventListener("keydown", (k) => this.keydown(k), true);
+        element.addEventListener("keyup", (k) => this.keyup(k), true);
     }
 }

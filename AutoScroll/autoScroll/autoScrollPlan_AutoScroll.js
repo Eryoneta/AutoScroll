@@ -1,5 +1,8 @@
 //AUTOSCROLL_PATCH
 var autoScroll_Patch;
+function _dragLoop_Patch() {
+    autoScroll_Patch._dragLoop();
+}
 function _autoDragLoop_Patch() {
     autoScroll_Patch._autoDragLoop();
 }
@@ -21,21 +24,22 @@ class AutoScroll {
         if (this._rootTarget === null) this._rootTarget = this._foreTarget;
     }
     _getElementWithScroll(element) {
-        if (this.plan.root.rule.isElementWindow(element)) return null;
-        if (!this.plan.root.rule.isElementValid(element)) return this._getElementWithScroll(element.parentNode);
+        if (!this.plan.root.rule.isElementValid(element)) return null;
         if (this.plan.root.rule.isElementABase(element)) return element;
-        if (!this.plan.root.rule.scrollHasToBeAllowed(element)) return this._getElementWithScroll(element.parentNode);
+        if (!this.plan.root.rule.isScrollAllowed(element)) return this._getElementWithScroll(element.parentNode);
         if (!this.plan.root.rule.isInNeedOfScroll(element)) return this._getElementWithScroll(element.parentNode);
+        if (!this.plan.root.rule.isScrollable(element)) return this._getElementWithScroll(element.parentNode);
         return element;
     }
     _getRootElementWithScroll(element) {
-        if (this.plan.root.rule.isElementWindow(element)) return null;
-        if (!this.plan.root.rule.isElementValid(element)) return this._getElementWithScroll(element.parentNode);
+        if (!this.plan.root.rule.isElementValid(element)) return null;
         if (this.plan.root.rule.isElementABase(element)) return element;
-        if (!this.plan.root.rule.scrollHasToBeAllowed(element)) return this._getRootElementWithScroll(element.parentNode);
+        if (!this.plan.root.rule.isScrollAllowed(element)) return this._getRootElementWithScroll(element.parentNode);
         if (!this.plan.root.rule.isInNeedOfScroll(element)) return this._getRootElementWithScroll(element.parentNode);
-        if (this._getRootElementWithScroll(element.parentNode) !== null) {
-            return this._getRootElementWithScroll(element.parentNode);
+        if (!this.plan.root.rule.isScrollable(element)) return this._getRootElementWithScroll(element.parentNode);
+        let parentElement = this._getRootElementWithScroll(element.parentNode);
+        if (parentElement !== null) {
+            return parentElement;
         } else return element;
     }
     hasTargets() {
@@ -99,8 +103,21 @@ class AutoScroll {
     getScroll() {
         return this._scroll;
     }
+    //(HORIZONTAL SCROLL)
+    horizontalScroll(deltaX) {
+        let element = this.getForegroundTarget();
+        let scrollX = element.scrollLeft;
+        const scrollWidth = element.scrollWidth - element.clientWidth;
+        scrollX += deltaX;
+        scrollX = Math.max(0, Math.min(scrollX, scrollWidth));
+        element.scrollLeft = scrollX;
+    }
     //(ANIMATION)
     _loop = () => { };
+    startDrag() {
+        this.stop();
+        if (this.hasTargets()) this._dragLoop();
+    }
     startAutoDrag() {
         this.stop();
         if (this.hasTargets()) this._autoDragLoop();
@@ -112,7 +129,7 @@ class AutoScroll {
     stop() {
         window.cancelAnimationFrame(this._loop);
     }
-    _autoDragLoop() {
+    _dragLoop() {
         let deltaX = 0;
         let deltaY = 0;
         if (this.isOutsideRestRadious()) {
@@ -122,6 +139,18 @@ class AutoScroll {
             deltaY = diffY / this.plan.root.rule.speedControl;
         }
         this._loopEngine(this._foreTarget, deltaX, deltaY);
+        this._loop = window.requestAnimationFrame(_dragLoop_Patch);
+    }
+    _autoDragLoop() {
+        let deltaX = 0;
+        let deltaY = 0;
+        if (this.isOutsideRestRadious()) {
+            const diffX = this._cursor.x - this._anchor.x;
+            const diffY = this._cursor.y - this._anchor.y;
+            deltaX = diffX / this.plan.root.rule.speedControl;
+            deltaY = diffY / this.plan.root.rule.speedControl;
+        }
+        this._loopEngine(this._rootTarget, deltaX, deltaY);
         this._loop = window.requestAnimationFrame(_autoDragLoop_Patch);
     }
     _autoScrollLoop() {
@@ -142,15 +171,13 @@ class AutoScroll {
         //LIMITA SCROLL NA TELA
         const scrollWidth = element.scrollWidth - element.clientWidth;
         const scrollHeight = element.scrollHeight - element.clientHeight;
-        scrollX = Math.max(0, Math.min(scrollX, scrollWidth));      //TODO: CHECAR SE REALMENTE O LIMITA
-        scrollY = Math.max(0, Math.min(scrollY, scrollHeight));     //TODO: CHECAR SE REALMENTE O LIMITA
+        scrollX = Math.max(0, Math.min(scrollX, scrollWidth));
+        scrollY = Math.max(0, Math.min(scrollY, scrollHeight));
         //MOVE SCROLL
         if (!isWindow) {
             // element.scrollLeft = scrollX;
             // element.scrollTop = scrollY;
-
-            window.scrollTo(scrollX, scrollY);
-
+            element.scrollTo(scrollX, scrollY);
         } else window.scroll(scrollX, scrollY);
     }
     //MAIN
@@ -166,6 +193,7 @@ class AutoScroll {
         return this.plan.root.rule.isOutsideRestRadious(distancia);
     }
     clear() {
+        this.stop();
         this._loop = () => { };
         this._foreTarget = null;
         this._rootTarget = null;

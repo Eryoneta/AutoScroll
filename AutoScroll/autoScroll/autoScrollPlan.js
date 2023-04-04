@@ -27,7 +27,7 @@ class AutoScrollPlan {
         document.addEventListener("mousemove", this.stopEvent, true);
         document.addEventListener("keydown", this.stopEvent, true);
         document.addEventListener("keyup", this.stopEvent, true);
-        document.addEventListener("contextmenu", this.stopEvent, true);	//IMPEDE DEFAUL_TOOLBOX
+        document.addEventListener("contextmenu", this.stopEvent, true);	//IMPEDE DEFAULT_TOOLBOX
     }
     ableDefaultActions() {
         document.removeEventListener("mousedown", this.stopEvent, true);
@@ -36,6 +36,6 @@ class AutoScrollPlan {
         document.removeEventListener("mousemove", this.stopEvent, true);
         document.removeEventListener("keydown", this.stopEvent, true);
         document.removeEventListener("keyup", this.stopEvent, true);
-        document.removeEventListener("contextmenu", this.stopEvent, true);	//PERMITE DEFAUL_TOOLBOX
+        document.removeEventListener("contextmenu", this.stopEvent, true);	//PERMITE DEFAULT_TOOLBOX
     }
 }

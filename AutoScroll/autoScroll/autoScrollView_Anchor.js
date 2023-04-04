@@ -7,7 +7,7 @@ class Anchor {
 	_image = {
 		basePath: "scrolls",
 		anchor: {
-			name: "F"	//EX: "Scrolls/F.png"
+			name: "F"	//EX: "scrolls/F.png"
 		},
 		fileType: "png"
 	}

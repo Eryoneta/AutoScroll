@@ -24,7 +24,7 @@ class AutoScrollRule {
         return true;
     }
     isInNeedOfScroll(element) {
-        return (this.isInNeedOfScrollX(element) || isInNeedOfScrollY(element));
+        return (this.isInNeedOfScrollX(element) || this.isInNeedOfScrollY(element));
     }
     isInNeedOfScrollX(element) {
         return (element.scrollWidth > element.clientWidth);
@@ -32,14 +32,25 @@ class AutoScrollRule {
     isInNeedOfScrollY(element) {
         return (element.scrollHeight > element.clientHeight);
     }
+    isScrollable(element) {
+        let scrollX = element.scrollLeft;
+        let scrollY = element.scrollTop;
+        element.scrollLeft += 1;
+        element.scrollTop += 1;
+        let scrolledX = (element.scrollLeft !== scrollX);
+        let scrolledY = (element.scrollTop !== scrollY);
+        element.scrollLeft = scrollX;
+        element.scrollTop = scrollY;
+        return (scrolledX || scrolledY);
+    }
     //(ELEMENT_VALIDATION)
     isElementValid(element) {
-        if (this.isElementWindow(element)) return false;                //NOT - WINDOW
-        if (this.isElementABase(element)) return true;                  //YES - DOC/HTML/BODY
-        if (element.isContentEditable) return false;					//NOT - EDITORES
-        if (element.localName === "a" && element.href) return false;	//NOT - <A> COM LINK
-        if (element.localName === "textarea") return false;				//NOT - <TEXTAREA>
-        if (element.localName === "input") return false;				//NOT - <INPUT>
+        if (this.isElementWindow(element)) return false;                //WINDOW
+        if (element.isContentEditable) return false;                    //EDITORES
+        if (element.localName === "a" && element.href) return false;    //<A> COM LINK
+        if (element.localName === "textarea") return false;             //<TEXTAREA>
+        if (element.localName === "input") return false;                //<INPUT>
+        return true;
     }
     isElementWindow(element) {
         return (element === window);
@@ -54,7 +65,6 @@ class AutoScrollRule {
         return (element === document.body);
     }
     isElementABase(element) {
-        if (this.isElementBody(element)) return true;
         if (this.isElementHTML(element)) return true;
         if (this.isElementDocument(element)) return true;
         if (this.isElementWindow(element)) return true;

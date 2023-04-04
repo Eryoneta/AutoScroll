@@ -22,20 +22,20 @@ class Cursor {
 				name: "M",
 				modes: { horizontal: { name: "H" }, vertical: { name: "V" }, center: { name: "HV" } }
 			},
-			up: {		//EX: "Scrolls/C/S/2.png"
+			up: {		//EX: "scrolls/C/S/2.png"
 				name: "C",
 				modes: { free: { name: "S" }, fixed: { name: "E" } }
 			},
 			upRight: {
-				name: "C",
+				name: "CD",
 				modes: { free: { name: "S" }, fixed: { name: "E" } }
 			},
 			right: {
-				name: "C",
+				name: "D",
 				modes: { free: { name: "S" }, fixed: { name: "E" } }
 			},
 			downRight: {
-				name: "C",
+				name: "BD",
 				modes: { free: { name: "S" }, fixed: { name: "E" } }
 			},
 			down: {
@@ -43,15 +43,15 @@ class Cursor {
 				modes: { free: { name: "S" }, fixed: { name: "E" } }
 			},
 			downLeft: {
-				name: "C",
+				name: "BE",
 				modes: { free: { name: "S" }, fixed: { name: "E" } }
 			},
 			left: {
-				name: "C",
+				name: "E",
 				modes: { free: { name: "S" }, fixed: { name: "E" } }
 			},
 			upLeft: {
-				name: "C",
+				name: "CE",
 				modes: { free: { name: "S" }, fixed: { name: "E" } }
 			}
 		},
@@ -113,7 +113,7 @@ class Cursor {
 					const cursorName = (direction.name + "/" + mode.name + "/" + frame.name);
 					const cursorPath = this._image.basePath + "/" + cursorName + "." + this._image.fileType;
 					keyframes += ("	" + frame.time + "%{ cursor:url('" + chrome.runtime.getURL(cursorPath) + "')16 16, auto; }");
-					//EX:  "	0.000%{ cursor:url('Scrolls/C/S/1.png')16 16, auto; }"
+					//EX:  "	0.000%{ cursor:url('scrolls/C/S/1.png')16 16, auto; }"
 					keyframes += "\n";
 				}
 				keyframes += "}";		//EX: }
