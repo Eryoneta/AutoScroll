@@ -24,5 +24,10 @@
 	"web_accessible_resources": [{
 		"resources": ["Scrolls/*.png"],
 		"matches": ["<all_urls>"]
-	}]
+	}],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "eryoneta@gmail.com"
+		}
+	}
 }
